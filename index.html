@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>
+        document.write('<script src="http://' + (location.host || '${1:localhost}').split(':')[0] + ':${2:35729}/livereload.js?snipver=1"></' + 'script>')
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./index.css">
+    <script src="./index.js"></script>
+</head>
+<body>
+    <div id="container">
+        
+        <div id="start" class="btn" onclick="lifecycle.start()">start</div>
+        <div id="stop" class="btn" onclick="lifecycle.stop()">stop</div>
+        <div id="create" class="btn" onclick="lifecycle.create()">CreateRandom</div>     
+        
+        <div id="root">
+
+            <div class="bird" style="left:1000px">1</div>
+            <div class="tuc">2</div>
+
+        </div>
+
+    </div>
+
+    <script>
+   factoryMove.fromRightToLeft();
+   /*  factoryA.getInstance(TYPE_CLOUD)
+    factoryA.getInstance(TYPE_BIRD)
+    factoryA.getInstance(TYPE_PLANE)
+    factoryA.getInstance(TYPE_FUEL)
+    factoryA.getInstance(TYPE_STAR)
+    */
+    
+    </script>
+</body>
+</html>
