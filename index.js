@@ -49,6 +49,12 @@ const factoryA = (() => {
 
 const lifecycle = (() => {
 
+    startAnimation = () => {
+        console.log("create");
+
+        factoryMove.fromTopToDown();
+    }
+
     start = () => {
         console.log("start");
     }
@@ -67,6 +73,7 @@ const lifecycle = (() => {
     }
 
     return {
+        startAnimation,
         start,
         stop,
         create
@@ -83,24 +90,66 @@ const factoryMove = (() => {
 
         list = [...document.querySelectorAll(".bird")];
         setInterval(() => {
-           
+
             list.forEach(element => {
+
                 let offset = parseInt(element.style.left);
                 element.style.left = (offset - 10) + "px";
-               // console.log(element.style.left + "  aa  " + offset);
+                // console.log(element.style.left + "  aa  " + offset);
             })
         }, 50);
-
-
-
     };
 
     fromTopToDown = () => {
         console.log("fromTopToDown");
+        let list = [];
+
+        list = [...document.querySelectorAll(".bird")];
+        list.forEach(element => {
+            let idInterval = setInterval(() => {
+
+                let offset = parseInt(element.style.top);
+                if (offset < 768) {
+                    element.style.top = (offset + 10) + "px";
+                    // console.log(element.style.left + "  aa  " + offset);
+                }
+            }, getRandom(10, 1000));
+            /*  let offset = parseInt(element.style.top);
+              if (offset > 700) {
+                  let b = document.getElementById("root");
+                  b.removeChild(element);
+                  clearInterval(idInterval);
+                  console.log(element.style.left + "  aa  " + offset);
+              }*/
+        });
     };
+
+    getAnimation = (typeObj) => {
+        switch (typeObj) {
+            case TYPE_CLOUD:
+            case TYPE_BIRD:
+
+
+            case TYPE_FUEL:
+            case TYPE_STAR:
+
+
+            case TYPE_PLANE:
+            default:
+
+                break;
+        }
+    }
 
     return {
         fromRightToLeft,
-        fromTopToDown
+        fromTopToDown,
+        getAnimation
     }
 })();
+
+
+
+
+
+

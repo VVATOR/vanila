@@ -10,17 +10,19 @@
     <title>Document</title>
     <link rel="stylesheet" href="./index.css">
     <script src="./index.js"></script>
-</head>
+    <script src="./observer.js"></script>
+    <!--  <script src="./aa.js"></script>
+ --></head>
 <body>
     <div id="container">
-        
+        <div id="startAnimation" class="btn" onclick="lifecycle.startAnimation()">starAnimation</div>
         <div id="start" class="btn" onclick="lifecycle.start()">start</div>
         <div id="stop" class="btn" onclick="lifecycle.stop()">stop</div>
         <div id="create" class="btn" onclick="lifecycle.create()">CreateRandom</div>     
         
         <div id="root">
 
-            <div class="bird" style="left:1000px">1</div>
+            <div class="bird" style="left:1000px; top:1px">1</div>
             <div class="tuc">2</div>
 
         </div>
@@ -28,7 +30,8 @@
     </div>
 
     <script>
-   factoryMove.fromRightToLeft();
+//    factoryMove.fromRightToLeft();
+   factoryMove.fromTopToDown();
    /*  factoryA.getInstance(TYPE_CLOUD)
     factoryA.getInstance(TYPE_BIRD)
     factoryA.getInstance(TYPE_PLANE)
