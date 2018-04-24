@@ -14,18 +14,62 @@
 .cloud{
     display: inline-block;
     position: absolute;
-    width: 50px;
-    height: 50px;
+    width: 150px;
+    height: 80px;
     border: 1px solid blue;
+    background-image: url('image/cloud.png');
+    background-size:cover;
+    animation: cloud ease-out 5s infinite;
+}
+
+@keyframes cloud{
+    0%,100%{
+       transform:scale(1.1);
+    }
+    50%{
+        transform:scale(0.9);
+    }
+}
+
+.fuel{
+    display: inline-block;
+    position: absolute;
+    width: 100px;
+    height: 160px;
+    border: 1px solid blue;
+    background-image: url('image/fuel.png');
+    background-size: cover;
+    animation: fuel 4s infinite;
+}
+
+@keyframes fuel {
+    0%,100%{
+        transform: rotate(20deg);
+    }
+    50%{
+        transform: rotate(-20deg);
+    }
 }
 
 .bird{
     display: inline-block;
     position: absolute;
-    width: 50px;
-    height: 50px;
+    width: 110px;
+    height: 100px;
+    background-image: url('image/bird1.png');
+    background-size:cover;
     border: 1px solid rgb(247, 3, 44);
+    animation: play .5s  steps(2) infinite;
 }
+@keyframes play {
+    0%,100%{
+        background-position: 110px; 
+    }
+    50% { 
+        background-position: -110px; 
+    }
+}
+
 .plane{
     display: inline-block;
     position: absolute;
@@ -37,7 +81,27 @@
 .star{
     display: inline-block;
     position: absolute;
-    width: 50px;
-    height: 50px;
+    width: 90px;
+    height: 80px;
     border: 1px solid lime;
+    background-image: url('image/star.png');
+    background-size:cover;
+    animation: star 3s ease-out infinite;
 }
+
+@keyframes star {
+    0%,100%{
+       transform: rotate(360deg); 
+    }
+    50% { 
+        transform: rotate(180deg);
+    }
+}
+
+.btn_game{
+    width: 90px;
+    height: 90px;
+    background: coral;
+    margin: 10px;
+}
+

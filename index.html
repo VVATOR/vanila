@@ -20,9 +20,18 @@
         <div id="stop" class="btn" onclick="lifecycle.stop()">stop</div>
         <div id="create" class="btn" onclick="lifecycle.create()">CreateRandom</div>     
         
+        <div id="btn_up" class="btn_game" onMouseMove="planeUp()">UP</div>
+        <div id="btn_down" class="btn_game" onMouseMove="planeDown()">DOWN</div>    
+
+
         <div id="root">
 
-            <div class="bird" style="left:1000px; top:1px">1</div>
+           
+            <div id="plane" class="plane" style="left:100px; top:500px">plane</div>
+            <div class="bird" style="left:1000px; top:1px"></div>
+            <div class="star" style="left:500px; top:1px"></div>
+            <div class="fuel" style="left:200px; top:1px"></div>
+            <div class="cloud" style="left:1000px; top:100px"></div>
             <div class="tuc">2</div>
 
         </div>
@@ -30,8 +39,10 @@
     </div>
 
     <script>
+        init();
 //    factoryMove.fromRightToLeft();
    factoryMove.fromTopToDown();
+   factoryMove.fromRightToLeft();
    /*  factoryA.getInstance(TYPE_CLOUD)
     factoryA.getInstance(TYPE_BIRD)
     factoryA.getInstance(TYPE_PLANE)
