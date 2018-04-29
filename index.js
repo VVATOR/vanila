@@ -122,11 +122,16 @@ const lifecycle = (() => {
         factoryA.getInstance(list[value]);
     }
 
+    addFuel = () => {
+        return ss+=10;
+    }
+
     return {
         startAnimation,
         start,
         stop,
-        create
+        create,
+        addFuel
     }
 })();
 
@@ -154,7 +159,7 @@ const factoryMove = (() => {
 
            
             list_bird.forEach((element, index, object) => {
-             //   if(isCrash(element)){
+                if(isCrash(element)){
                     let offset = parseInt(element.style.left);
                     if (offset > -200) {
                         element.style.left = (offset - 3) + "px";
@@ -163,7 +168,7 @@ const factoryMove = (() => {
                         destroyObj(object, index, element);
                     }
                     // console.log(element.style.left + "  aa  " + offset);
-              //  }
+                }
             })
             
         }, 30);
@@ -380,6 +385,34 @@ if(s<10){
 }else{
     document.getElementById('timer').innerHTML = (m + ":" + s);
 }
+},1000);
+
+//Обратный таймер
+
+let ss= 10;
+let mm=0;
+let pidTimer = setInterval(()=> {
+    if (ss===0){
+        alert("GameOver");
+        return clearInterval(pidTimer);
+    }
+    ss--;
+
+    let sss = ss % 60;
+    let mmm = Math.floor(ss / 60);
+    if (sss % 60 == 0){
+        sss=0;
+        if (mmm > 0){
+            mmm--;
+        }
+    }
+    if(sss<10){
+        document.getElementById('score__fuel').innerHTML = (mmm + ":0" + sss);
+    }else{
+        document.getElementById('score__fuel').innerHTML = (mmm + ":" + sss);
+    }
+
+
 },1000);
 
 

@@ -143,6 +143,19 @@
     display: block;
 }
 
+#score__fuel{
+    width: 30px;
+    height: 40px;
+    position: absolute;
+    top: 0;
+    left: 50px;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color:#fff;
+    display: block;
+}
+
+
 .btn{
 z-index: 5;
 border: 1px solid rgba(0,0,0,0.7);
