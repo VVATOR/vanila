@@ -11,45 +11,144 @@
     <link rel="stylesheet" href="./index.css">
     <script src="./index.js"></script>
     <script src="./observer.js"></script>
+    
     <!--  <script src="./aa.js"></script>
  --></head>
 <body>
     <div id="container">
-        <div id="startAnimation" class="btn" onclick="lifecycle.startAnimation()">starAnimation</div>
-        <div id="start" class="btn" onclick="lifecycle.start()">start</div>
-        <div id="stop" class="btn" onclick="lifecycle.stop()">stop</div>
-        <div id="create" class="btn" onclick="lifecycle.create()">CreateRandom</div>     
+        <div id="startAnimation" onclick="lifecycle.startAnimation()">starAnimation</div>
+        <div id="start" onclick="lifecycle.start()">start</div>
+        <div id="stop" onclick="lifecycle.stop()">stop</div>
+        <div id="create" onclick="lifecycle.create()">CreateRandom</div>     
         
-        <div id="btn_up" class="btn_game" onMouseMove="planeUp()">UP</div>
-        <div id="btn_down" class="btn_game" onMouseMove="planeDown()">DOWN</div>    
-
-
+ 
         <div id="root">
 
-           
-            <div id="plane" class="plane" style="left:100px; top:500px">plane</div>
+            <div id="score_star">
+                <img src="image/star.png" alt="star">
+                <div id="score__star"></div>
+            </div>
+
+            <div id="score_fuel">
+                <img src="image/fuel_score.png" alt="fuel_score">
+                <div id="score__fuel"></div>
+            </div>
+
+            <div id="btn_sound" class="btn" ></div>
+            <audio id="myaudio">
+                <source src="http://upload.wikimedia.org/wikipedia/commons/5/59/C_major_scale.ogg" type="audio/ogg; codecs=vorbis" />
+            </audio>
+
+            <div id="shrift_up" class="btn"></div>
+            <div id="shrift_down" class="btn"></div>
+            <div id="pause" class="btn" onclick="modalPause()"></div>
+
+
+            <div id="btn_up" class="btn btn_game" onMouseMove="planeUp()"></div>
+            <div id="btn_down" class="btn btn_game" onMouseMove="planeDown()"></div>   
+            <div id="btn_left" class="btn btn_game" onMouseMove="planeLeft()"></div>
+            <div id="btn_right" class="btn btn_game" onMouseMove="planeRight()"></div> 
+
+
+            <div id="timer_main">
+                <img src="image/timer.png" alt="timer">
+                <div id="timer"></div>
+            </div>
+
+            <div id="plane" class="plane" style="left:100px; top:500px"></div>
             <div class="bird" style="left:1000px; top:1px"></div>
             <div class="star" style="left:500px; top:1px"></div>
             <div class="fuel" style="left:200px; top:1px"></div>
             <div class="cloud" style="left:1000px; top:100px"></div>
-            <div class="tuc">2</div>
+            <!-- <div class="tuc">2</div> -->
+
 
         </div>
 
+
+
+        <div id="popup" class="popup">
+                <img src="image/logo.png" alt="logo">
+                <div class="btn-startgame" onclick="showModal()">START GAME</div>
+                <div class="prove">
+                    <h2>HOW TO PLAY ADVENTURE PLANE</h2>
+                    <p>1. Move the spaceship using the sensuble areas in the screen;<br/>
+                        2. The timer present the time lapsed;<br/>
+                        3.The fule counter show the remain fuel;<br/>
+                        4. During the flight, the spaceshop needs to destroy the sateroid and enemy spaceshops thaht are presented in the space;<br/>
+                        5. You can shoot pressing Space Bar;<br/>
+                        6.If the spaceshop hits a asteroid or another spaceshoip, ypu lose 15 15 point of fuel;<br/>
+                        7. Enemy spaceshop needs 1 shot to be destroyed, you will get 5 points for each enemy destroyed;<br/>
+                        8. Asteroid needs 2 shots to be destroyed, you will get 10 points for each asteroid destroyedl<br/>
+                        9. If ypu destroy a friendly spaceshop, you lose 10 poiints;<br/>
+                        10. During the fight, the spaceship needs to collect fuel in the space;;<br/>
+                        11. You can pause the game clicking in burron pause, or pressing the letter "p";<br/>
+                        12. Go beyong all limitsl<br/>
+                        Battle in space with Adventure plane ChampionPlane...<br/>
+                    </p>
+                </div>
+            </div>
+
     </div>
 
+       <!-- Наше модальное всплывающее окно -->
+       <div style="text-align: center" id="popupWin" class="modalwin">
+            <h2> Какая-то форма </h2>
+            <form>
+                <input value="text">
+                <input type="button" value="OK">
+            </form>
+            <hr>
+            <h2> Какой-то текст </h2>
+            <br> <p> УРа!!!!!!!!!! </p>
+            <hr>
+        </div>
+
+
     <script>
-        init();
+        // MODAL PAUSE
+// function modalPause() {
+ 
+//  var darkLayer = document.createElement('div'); // слой затемнения
+//  darkLayer.id = 'shadow'; // id чтобы подхватить стиль
+//  document.body.appendChild(darkLayer); // включаем затемнение
+
+//  var modalWin = document.getElementById('popupWin'); // находим наше "окно"
+//  modalWin.style.display = 'block'; // "включаем" его
+
+//  darkLayer.onclick = function () {  // при клике на слой затемнения все исчезнет
+//      darkLayer.parentNode.removeChild(darkLayer); // удаляем затемнение
+//      modalWin.style.display = 'none'; // делаем окно невидимым
+//      return false;
+//  };
+// }
+
+
 //    factoryMove.fromRightToLeft();
    factoryMove.fromTopToDown();
    factoryMove.fromRightToLeft();
+  
    /*  factoryA.getInstance(TYPE_CLOUD)
     factoryA.getInstance(TYPE_BIRD)
     factoryA.getInstance(TYPE_PLANE)
     factoryA.getInstance(TYPE_FUEL)
     factoryA.getInstance(TYPE_STAR)
     */
-    
+
+    let myAudio = document.getElementById('myaudio');
+   /// myAudio.paused = true;
+   // document.getElementById('myaudio').play();
+
+    document.getElementById('btn_sound').onclick = function(){
+     
+     if (myAudio.paused == true){
+         document.getElementById('myaudio').play();
+         this.style.backgroundImage = "url('image/audio_on.png')";
+     } else if(myAudio.paused == false){
+        document.getElementById('myaudio').pause();
+        this.style.backgroundImage = "url('image/audio_off.png')";
+     }
+ }
     </script>
 </body>
 </html>

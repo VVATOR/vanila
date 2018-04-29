@@ -9,7 +9,15 @@ const TYPE_PLANE = "plane";
 const TYPE_FUEL = "fuel";
 const TYPE_STAR = "star";
 
+const TYPE_CLOUD_P = 100;
+const TYPE_BIRD_P = 80;
+const TYPE_PLANE_P = 0;
+const TYPE_FUEL_P = 20;
+const TYPE_STAR_P = 70;
+
 let list = [TYPE_CLOUD, TYPE_BIRD, TYPE_PLANE, TYPE_FUEL, TYPE_STAR];
+let list_p = [TYPE_CLOUD_P, TYPE_BIRD_P, TYPE_PLANE_P, TYPE_FUEL_P, TYPE_STAR_P];
+
 
 function getRandom(min, max) {
     let r = Math.floor(Math.random() * (max - min)) + min;
@@ -22,6 +30,17 @@ const factoryA = (() => {
     }
 
     privateElementGenerator = (className) => {
+        let baseKoef = getRandom(0, 100);
+        let index = 0;
+        for (let i = 0; i < list.length; i++) {
+            if(className === list[i])
+            index=i;            
+        }
+        if(baseKoef>=list_p[index]){
+           return false;        
+        }
+
+
         let isCorrect = false;
 
         list.forEach((element) => {
@@ -36,7 +55,24 @@ const factoryA = (() => {
         let obj = document.createElement("div");
         let text = document.createTextNode(className);
         obj.setAttribute("class", className);
-        obj.setAttribute("style", "top: " + getRandom(1, 1024) + "px; left: " + getRandom(1, 768) + "px");
+
+
+          
+
+        if(className === TYPE_BIRD){
+            obj.setAttribute("style", "top: " + getRandom(50, 750) + "px; left: " + 1040 + "px");
+        } if(className === TYPE_CLOUD){
+            obj.setAttribute("style", "top: " + getRandom(50, 750) + "px; left: " + 1040 + "px");
+        } if(className === TYPE_FUEL){          
+            obj.setAttribute("style", "top: -190px; left: " + getRandom(50, 1000) + "px");
+        } if(className === TYPE_STAR){
+            obj.setAttribute("style", "top: -190px; left: " + getRandom(50, 1000) + "px");
+        }  if(className === TYPE_PLANE){
+            return;
+        }
+
+
+       // obj.setAttribute("style", "top: " + getRandom(1, 1024) + "px; left: " + getRandom(1, 768) + "px");
         obj.appendChild(text);
         let root = document.getElementById("root");
         root.appendChild(obj);
@@ -64,9 +100,9 @@ const lifecycle = (() => {
 
             lifecycle.create();
             factoryMove.fromTopToDown();
-            factoryMove.fromRightToLeft();
+            factoryMove.fromRightToLeft(); //ускоряет
 
-        }, 1000);
+        }, 500);
         
     }
 
@@ -79,6 +115,9 @@ const lifecycle = (() => {
         console.log(list[3]);
 
         let value = getRandom(0, list.length);
+
+        
+
 
         factoryA.getInstance(list[value]);
     }
@@ -98,6 +137,13 @@ const lifecycle = (() => {
 
 const factoryMove = (() => {
 
+    destroyObj = (list_array, i,element) =>{
+  
+        if ( element.parentNode==null) return;
+        list_array.splice(i,1);
+        element.parentNode.removeChild(element);      
+    }
+
     fromRightToLeft = () => {
         console.log("fromRightToLeft");
         // factoryA.getInstance(TYPE_CLOUD);
@@ -107,34 +153,39 @@ const factoryMove = (() => {
         setInterval(() => {
 
            
-            list_bird.forEach(element => {
-                if(isCrash(element)){
+            list_bird.forEach((element, index, object) => {
+             //   if(isCrash(element)){
                     let offset = parseInt(element.style.left);
-                    if (offset > 0) {
-                        element.style.left = (offset - 10) + "px";
+                    if (offset > -200) {
+                        element.style.left = (offset - 3) + "px";
                         // console.log(element.style.left + "  aa  " + offset);
+                    }else{
+                        destroyObj(object, index, element);
                     }
                     // console.log(element.style.left + "  aa  " + offset);
-                }
+              //  }
             })
             
-        }, 90);
+        }, 30);
 
 
         let list_cloud = [];
         list_cloud = [...document.querySelectorAll(".cloud")];
         setInterval(() => {
             
-            list_cloud.forEach(element => {
+            list_cloud.forEach((element, index, object) => {
 
                 let offset = parseInt(element.style.left);
                 if (offset > -200) {
                     element.style.left = (offset - 1) + "px";
+                   
                     // console.log(element.style.left + "  aa  " + offset);
+                } else{
+                    destroyObj(object, index, element);
                 }
                 // console.log(element.style.left + "  aa  " + offset);
             })
-        }, 10);
+        }, 3);
     };
 
     
@@ -165,30 +216,34 @@ const factoryMove = (() => {
         let list_star = [];
 
         list_star = [...document.querySelectorAll(".star")];
-        list_star.forEach(element => {
+        list_star.forEach((element, index, object) => {
             let idInterval = setInterval(() => {
 
                 let offset = parseInt(element.style.top);
-                if (offset < 768) {
+                if (offset < 788) {
                     element.style.top = (offset + 1) + "px";
                     // console.log(element.style.left + "  aa  " + offset);
+                }else{
+                    destroyObj(object, index, element);
                 }
-            }, 5);
+            }, 20);
         });
 
                             
         let list_fuel = [];
 
         list_fuel = [...document.querySelectorAll(".fuel")];
-        list_fuel.forEach(element => {
+        list_fuel.forEach((element, index, object) => {
             let idInterval = setInterval(() => {
 
                 let offset = parseInt(element.style.top);
-                if (offset < 768) {
+                if (offset < 788) {
                     element.style.top = (offset + 1) + "px";
                     // console.log(element.style.left + "  aa  " + offset);
+                }else{
+                    destroyObj(object, index, element);
                 }
-            }, 10);
+            }, 20);
         });
     };
 
@@ -226,7 +281,6 @@ const factoryMove = (() => {
 
 //////////////////////////////////
 function init(){
-   var plane = document.querySelector('#plane');
     px1 = parseInt(plane.style.left);
     px2 = parseInt(plane.style.left) +  parseInt(plane.offsetWidth);
     py1 = parseInt(plane.style.top);
@@ -260,11 +314,93 @@ function isCrash(element){
 }
 
 
-function planeUp(){
-    plane.style.top = (parseInt(plane.style.top) - 20) +'px';
-}
 
-function planeDown(){
-    plane.style.top = (parseInt(plane.style.top) + 20) +'px';
+
+const factoryMovePlane = (() =>{
+    planeUp = () => {
+        let offset = parseInt(plane.style.top);
+        if(offset > 0){
+            plane.style.top = (offset - 5) +'px';
+            // plane.style.top = (parseInt(plane.style.top) - 20) +'px';
+        }
+    }
+
+    planeDown = () => {
+        let offset = parseInt(plane.style.top);
+        if(offset => 0){
+            if(offset < 620){
+                plane.style.top = (offset + 5) +'px';
+            }
+            // plane.style.top = (parseInt(plane.style.top) - 20) +'px';
+        }
+        // plane.style.top = (parseInt(plane.style.top) + 20) +'px';
+    }
+
+    ///// left right
+
+    planeLeft = () => {
+        let offset = parseInt(plane.style.left);
+        if(offset > 0 ){
+            plane.style.left = (offset - 5) +'px';
+        }
+        // plane.style.left = (parseInt(plane.style.left) - 20) +'px';
+    }
+
+    planeRight = () => {
+        let offset = parseInt(plane.style.left);
+        console.log(offset);
+        if(offset => 0){
+            if (offset < 860){
+                plane.style.left = (offset + 5) +'px';
+            }
+        }
+        // plane.style.left = (parseInt(plane.style.left) + 20) +'px';
+    }
+
+    return {
+        planeUp,
+        planeDown,
+        planeLeft,
+        planeRight
+    }
+})();
+
+
+//TIMER
+let s=0;
+let m=0;
+setInterval(()=>{
+s++;
+if(s===60){
+   s=0;
+   m++
+}
+if(s<10){
+    document.getElementById('timer').innerHTML = (m + ":0" + s);
+}else{
+    document.getElementById('timer').innerHTML = (m + ":" + s);
+}
+},1000);
+
+
+//MUSIC
+// document.getElementById('btn_sound').onclick = function(){
+//     let myAudio = document.getElementById('myaudio');
+//     if (myAudio.paused == true){
+//         document.getElementById('myaudio').play();
+//         this.style.backgroundImage = "url('image/audio_on.png')";
+//     } else if(myAudio.paused == false){
+//        document.getElementById('myaudio').pause();
+//        this.style.backgroundImage = "url('image/audio_off.png')";
+//     }
+
+
+
+////MODAL
+function showModal(){
+    var modalWin = document.getElementById('root');
+    modalWin.style.display = 'block';
+    var dontModal = document.getElementById('popup');
+    dontModal.style.display = 'none';
 }
 

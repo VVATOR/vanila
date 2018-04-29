@@ -4,11 +4,13 @@
 #root{
     width: 1024px;
     height: 768px;
-    background: #cdcdcd;
+    background: #4d6fff;
     position: relative;
     left:50%;
     margin-left: -512px;
     border: 1px solid red;
+    overflow:hidden;
+    display: none;
 }
 
 .cloud{
@@ -19,7 +21,7 @@
     border: 1px solid blue;
     background-image: url('image/cloud.png');
     background-size:cover;
-    animation: cloud ease-out 5s infinite;
+    animation: cloud 5s infinite;
 }
 
 @keyframes cloud{
@@ -40,6 +42,7 @@
     background-image: url('image/fuel.png');
     background-size: cover;
     animation: fuel 4s infinite;
+    z-index: 2;
 }
 
 @keyframes fuel {
@@ -60,22 +63,36 @@
     background-size:cover;
     border: 1px solid rgb(247, 3, 44);
     animation: play .5s  steps(2) infinite;
+    z-index: 2;
 }
 @keyframes play {
     0%,100%{
         background-position: 110px; 
     }
     50% { 
-        background-position: -110px; 
+        background-position: -113px; 
     }
 }
 
 .plane{
     display: inline-block;
     position: absolute;
-    width: 50px;
-    height: 50px;
+    width: 164px;
+    height: 151px;
     border: 1px solid black;
+    background-image: url('image/plane_two.png');
+    background-size: cover;
+    animation: plane .5s steps(1) infinite;
+    z-index: 2;
+}
+
+@keyframes plane{
+    0%,100%{
+        background-position: 161px;
+    }
+    50%{
+        background-position: 331px;
+    }
 }
 
 .star{
@@ -86,7 +103,8 @@
     border: 1px solid lime;
     background-image: url('image/star.png');
     background-size:cover;
-    animation: star 3s ease-out infinite;
+    animation: star 3s infinite;
+    z-index: 2;
 }
 
 @keyframes star {
@@ -98,10 +116,236 @@
     }
 }
 
+#timer_main{
+    border:1px solid red;
+    left: 50%;
+    margin-left: -60px;
+    position: absolute;
+    font-size: 2.6rem;
+    z-index: 5;
+}
+
+#timer_main img{
+    width: 40px;
+    height: 40px;
+    top: 10px;
+    position: absolute;
+    padding: 0 10px 10px 10px;
+}
+#timer{
+    width: 70px;
+    height: 40px;
+    position: absolute;
+    top: 8px;
+    left: 70px;
+    font-weight: bold;
+    color:#fff;
+    display: block;
+}
+
+.btn{
+z-index: 5;
+border: 1px solid rgba(0,0,0,0.7);
+border-radius: 50%;
+}
+
+
+
 .btn_game{
     width: 90px;
     height: 90px;
-    background: coral;
+    background: transparent;
     margin: 10px;
+    border-radius: 50%;
+    position: absolute;
+    z-index: 999;
+    cursor: pointer;
 }
 
+#btn_up{
+    background-image: url('image/up.png');
+    background-size: cover;
+    bottom: 130px;
+    right:100px;
+}
+
+#btn_down{
+    background-image: url('image/down.png');
+    background-size: cover;
+    bottom: 10px;
+    right:100px;
+}
+
+#btn_left{
+    background-image: url('image/left.png');
+    background-size: cover;
+    bottom: 70px;
+    right:190px;
+}
+
+#btn_right{
+    background-image: url('image/right.png');
+    background-size: cover;
+    bottom: 70px;
+    right:10px;
+}
+
+#score_star{
+    position: absolute;
+    top: 10px;
+    right: 150px;
+}
+
+#score_star img{
+    width:50px;
+    height:43px;
+}
+
+#score__star{
+
+}
+
+#score_fuel{
+    position: absolute;
+    top: 10px;
+    right: 330px;
+}
+
+#score_fuel img{
+    width: 27px;
+    height: 43px;
+}
+
+#btn_sound{
+    position: absolute;
+    background-image:url('image/audio_off.png');
+    background-size:cover;
+    width: 120px;
+    height: 120px;
+    bottom: 10px;
+    left:10px;
+    cursor: pointer;
+}
+
+#shrift_up{
+    position: absolute;
+    background-image:url('image/shrift_up.png');
+    background-size:cover;
+    width: 100px;
+    height: 100px;
+    bottom: 10px;
+    left:140px;
+    cursor: pointer;
+}
+
+#shrift_down{
+    position: absolute;
+    background-image:url('image/shrift_down.png');
+    background-size:cover;
+    width: 70px;
+    height: 70px;
+    bottom: 10px;
+    left:250px;
+    cursor: pointer;
+}
+
+#pause{
+    position: absolute;
+    background-image:url('image/pause.png');
+    background-size:cover;
+    width: 100px;
+    height: 100px;
+    bottom: 10px;
+    left:330px;  
+    cursor: pointer;
+}
+/* logo */
+
+/* popup */
+
+.popup{
+    width: 1024px;
+    height: 768px;
+    background: #af6a6a;
+    position: relative;
+    left:50%;
+    margin-left: -512px;
+    border: 1px solid red;
+    font-family: 'Courier New', Courier, monospace
+    
+}
+
+.popup img{
+    width: 29%;
+    height: 250px;
+    position: absolute;
+    left: 10;
+}
+.popup .prove{
+    width: 70%;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.prove h2{
+    font-size: 2.2rem;
+    font-weight: bold;
+    text-align: center;
+}
+.prove p{
+    font-size: 1.4rem;
+    line-height: 27px;
+    letter-spacing: -2px;
+}
+.popup .btn-startgame{
+    font-weight: bold;
+    font-size: 2.1rem;
+    color:fuchsia;
+    background: #b70b0c;
+    position: absolute;
+    border: 1ps solid black;
+    border-radius: 20px;
+    padding: 17px 23px; 
+    top:40%;
+    left: 30px;
+    cursor: pointer;
+}
+
+.popup .btn-startgame:hover{
+    background: #890d0d;
+}
+.popup .btn-startgame:active{
+    background: #e31010;
+}
+
+
+
+
+.modalwin { 
+    height: 200px;  
+    width: 300px;
+    border: 3px outset gray; 
+    background: wheat;
+    top: 20%; /* отступ сверху */
+    right: 0;
+    left: 0;
+    font-size: 14px; 
+    margin: 0 auto;
+    z-index:2; /* поверх всех */
+    display: none;  /* сначала невидим */
+    position: fixed; /* фиксированное позиционирование, окно стабильно при прокрутке */
+    padding: 15px;
+    border: 1px solid #383838;
+    z-index: 15;
+}
+#shadow { 
+    position: fixed;
+    width:100%;
+    height:100%;
+    z-index:12; /* поверх всех  кроме окна*/
+    background:#000;
+    opacity: 0.5; /*прозрачность*/
+    left:0;
+    top:0;
+}
