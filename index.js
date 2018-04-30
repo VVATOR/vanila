@@ -15,6 +15,9 @@ const TYPE_PLANE_P = 0;
 const TYPE_FUEL_P = 20;
 const TYPE_STAR_P = 70;
 
+let score_star = 0;
+
+
 let list = [TYPE_CLOUD, TYPE_BIRD, TYPE_PLANE, TYPE_FUEL, TYPE_STAR];
 let list_p = [TYPE_CLOUD_P, TYPE_BIRD_P, TYPE_PLANE_P, TYPE_FUEL_P, TYPE_STAR_P];
 
@@ -102,7 +105,7 @@ const lifecycle = (() => {
             factoryMove.fromTopToDown();
             factoryMove.fromRightToLeft(); //ускоряет
 
-        }, 500);
+        }, 1000);
         
     }
 
@@ -159,7 +162,9 @@ const factoryMove = (() => {
 
            
             list_bird.forEach((element, index, object) => {
-                if(isCrash(element)){
+                if(!XXX(element,plane)){
+
+                //if(isCrash(element)){
                     let offset = parseInt(element.style.left);
                     if (offset > -200) {
                         element.style.left = (offset - 3) + "px";
@@ -168,6 +173,9 @@ const factoryMove = (() => {
                         destroyObj(object, index, element);
                     }
                     // console.log(element.style.left + "  aa  " + offset);
+               // }
+                }else{
+                    destroyObj(object, index, element);
                 }
             })
             
@@ -223,6 +231,7 @@ const factoryMove = (() => {
         list_star = [...document.querySelectorAll(".star")];
         list_star.forEach((element, index, object) => {
             let idInterval = setInterval(() => {
+                if(!XXX(element,plane)){
 
                 let offset = parseInt(element.style.top);
                 if (offset < 788) {
@@ -231,9 +240,14 @@ const factoryMove = (() => {
                 }else{
                     destroyObj(object, index, element);
                 }
+            }else{
+                clearInterval(idInterval);
+                document.getElementById('score__star').innerHTML = (score_star +=50);
+                destroyObj(object, index, element);
+            }
             }, 20);
         });
-
+        
                             
         let list_fuel = [];
 
@@ -297,6 +311,39 @@ var px2 =0;
 var py1 =0;
 var py2 =0;
 
+
+// сейчас залабаем метод который будет отвечать за столкновение 
+///можно позвонить))
+///ок
+
+function XXX(element, plane){
+
+    let obj1 = {
+        x: parseInt(element.style.left),
+        y: parseInt(element.style.top),
+        width:parseInt(element.style.left) -  parseInt(element.offsetWidth),
+        height:parseInt(element.style.top)  +  parseInt(element.offsetHeight)
+    };
+    let obj2 = {
+        x: parseInt(plane.style.left),
+        y: parseInt(plane.style.top),
+        width:parseInt(plane.style.left) -  parseInt(plane.offsetWidth),
+        height:parseInt(plane.style.top)  +  parseInt(plane.offsetHeight)
+    };
+
+
+
+    let xColl = false;
+    let yColl = false;
+
+    if((obj1.x + obj1.width >=obj2.x)&&(obj1.x <=obj2.x + obj2.width)) xColl =true;
+    if((obj1.y + obj1.height >=obj2.y)&&(obj1.y <=obj2.y + obj2.height)) yColl =true;
+
+        if(xColl&yColl) {
+            return true;
+        }
+        return false;
+}
 
 function isCrash(element){
     let ex1 = parseInt(element.style.left);
@@ -411,9 +458,17 @@ let pidTimer = setInterval(()=> {
     }else{
         document.getElementById('score__fuel').innerHTML = (mmm + ":" + sss);
     }
-
-
 },1000);
+
+//UP SHIFT
+function changeFontSize(command){
+    if(command === "plus"){
+        let fSize = document.querySelector('score__fuel');
+        fSize.style.fontSize = (parseInt(fSize.style.fontSize)+ 2) + "px";
+        alert(fSize.style.fontSize + "d");
+    }
+};
+
 
 
 //MUSIC
