@@ -151,6 +151,14 @@ const factoryMove = (() => {
                         destroyObj(object, index, element);
                     }
                 } else {
+                    let obj1 = {
+                        x: parseInt(element.style.left),
+                        y: parseInt(element.style.top),
+                        width: parseInt(element.style.left) - parseInt(element.offsetWidth),
+                        height: parseInt(element.style.top) + parseInt(element.offsetHeight)
+                    };
+                    console.log("---");
+                    console.log(obj1);
                     clearInterval(idIntervalBird);
                     destroyObj(object, index, element);
                 }
@@ -286,6 +294,7 @@ function isCrash(element, plane) {
         height: parseInt(plane.style.top) + parseInt(plane.offsetHeight)
     };
 
+    
 
 
     let xColl = false;
