@@ -36,13 +36,12 @@ const factoryA = (() => {
         let baseKoef = getRandom(0, 100);
         let index = 0;
         for (let i = 0; i < list.length; i++) {
-            if(className === list[i])
-            index=i;            
+            if (className === list[i])
+                index = i;
         }
-        if(baseKoef>=list_p[index]){
-           return false;        
+        if (baseKoef >= list_p[index]) {
+            return false;
         }
-
 
         let isCorrect = false;
 
@@ -60,22 +59,18 @@ const factoryA = (() => {
         obj.setAttribute("class", className);
 
 
-          
-
-        if(className === TYPE_BIRD){
+        if (className === TYPE_BIRD) {
             obj.setAttribute("style", "top: " + getRandom(50, 750) + "px; left: " + 1040 + "px");
-        } if(className === TYPE_CLOUD){
+        } if (className === TYPE_CLOUD) {
             obj.setAttribute("style", "top: " + getRandom(50, 750) + "px; left: " + 1040 + "px");
-        } if(className === TYPE_FUEL){          
+        } if (className === TYPE_FUEL) {
             obj.setAttribute("style", "top: -190px; left: " + getRandom(50, 1000) + "px");
-        } if(className === TYPE_STAR){
+        } if (className === TYPE_STAR) {
             obj.setAttribute("style", "top: -190px; left: " + getRandom(50, 1000) + "px");
-        }  if(className === TYPE_PLANE){
+        } if (className === TYPE_PLANE) {
             return;
         }
 
-
-       // obj.setAttribute("style", "top: " + getRandom(1, 1024) + "px; left: " + getRandom(1, 768) + "px");
         obj.appendChild(text);
         let root = document.getElementById("root");
         root.appendChild(obj);
@@ -106,7 +101,6 @@ const lifecycle = (() => {
             factoryMove.fromRightToLeft(); //ускоряет
 
         }, 1000);
-        
     }
 
     stop = () => {
@@ -118,15 +112,11 @@ const lifecycle = (() => {
         console.log(list[3]);
 
         let value = getRandom(0, list.length);
-
-        
-
-
         factoryA.getInstance(list[value]);
     }
 
     addFuel = () => {
-        return ss+=10;
+        return score__fuel += 10;
     }
 
     return {
@@ -138,130 +128,95 @@ const lifecycle = (() => {
     }
 })();
 
-
-
-
-
-
 const factoryMove = (() => {
 
-    destroyObj = (list_array, i,element) =>{
-  
-        if ( element.parentNode==null) return;
-        list_array.splice(i,1);
-        element.parentNode.removeChild(element);      
+    destroyObj = (list_array, i, element) => {
+        if (element.parentNode == null) return;
+        list_array.splice(i, 1);
+        element.parentNode.removeChild(element);       
     }
 
     fromRightToLeft = () => {
-        console.log("fromRightToLeft");
-        // factoryA.getInstance(TYPE_CLOUD);
+        //console.log("fromRightToLeft");
         let list_bird = [];
-
         list_bird = [...document.querySelectorAll(".bird")];
-        setInterval(() => {
-
-           
+        let idIntervalBird = setInterval(() => {
             list_bird.forEach((element, index, object) => {
-                if(!XXX(element,plane)){
-
-                //if(isCrash(element)){
+                if (!isCrash(element, plane)) {
                     let offset = parseInt(element.style.left);
                     if (offset > -200) {
                         element.style.left = (offset - 3) + "px";
-                        // console.log(element.style.left + "  aa  " + offset);
-                    }else{
+                    } else {
+                        clearInterval(idIntervalBird);
                         destroyObj(object, index, element);
                     }
-                    // console.log(element.style.left + "  aa  " + offset);
-               // }
-                }else{
+                } else {
+                    clearInterval(idIntervalBird);
                     destroyObj(object, index, element);
                 }
             })
-            
         }, 30);
 
 
         let list_cloud = [];
         list_cloud = [...document.querySelectorAll(".cloud")];
-        setInterval(() => {
-            
+        let idIntervalCloud = setInterval(() => {
             list_cloud.forEach((element, index, object) => {
 
                 let offset = parseInt(element.style.left);
                 if (offset > -200) {
                     element.style.left = (offset - 1) + "px";
-                   
-                    // console.log(element.style.left + "  aa  " + offset);
-                } else{
-                    destroyObj(object, index, element);
+                } else {
+                    clearInterval(idIntervalCloud);
+                    destroyObj(object, index, element, idIntervalCloud);
                 }
-                // console.log(element.style.left + "  aa  " + offset);
             })
         }, 3);
     };
 
-    
+
     fromTopToDown = () => {
-        console.log("fromTopToDown");
-        let list = [];
-
-        // list = [...document.querySelectorAll(".bird")];
-        // list.forEach(element => {
-        //     let idInterval = setInterval(() => {
-
-        //         let offset = parseInt(element.style.top);
-        //         if (offset < 768) {
-        //             element.style.top = (offset + 10) + "px";
-        //             // console.log(element.style.left + "  aa  " + offset);
-        //         }
-        //     }, getRandom(10, 1000));
-        //     /*  let offset = parseInt(element.style.top);
-        //       if (offset > 700) {
-        //           let b = document.getElementById("root");
-        //           b.removeChild(element);
-        //           clearInterval(idInterval);
-        //           console.log(element.style.left + "  aa  " + offset);
-        //       }*/
-        // });
-
-                    
+     //   console.log("fromTopToDown");      
         let list_star = [];
 
         list_star = [...document.querySelectorAll(".star")];
         list_star.forEach((element, index, object) => {
-            let idInterval = setInterval(() => {
-                if(!XXX(element,plane)){
-
-                let offset = parseInt(element.style.top);
-                if (offset < 788) {
-                    element.style.top = (offset + 1) + "px";
-                    // console.log(element.style.left + "  aa  " + offset);
-                }else{
+            let idIntervalStar = setInterval(() => {
+                if (!isCrash(element, plane)) {
+                    let offset = parseInt(element.style.top);
+                    if (offset < 788) {
+                        element.style.top = (offset + 1) + "px";
+                    } else {
+                        clearInterval(idIntervalStar);
+                        destroyObj(object, index, element);
+                    }
+                } else {
+                    clearInterval(idIntervalStar);
+                    document.getElementById('score__star').innerHTML = (score_star += 50);
                     destroyObj(object, index, element);
                 }
-            }else{
-                clearInterval(idInterval);
-                document.getElementById('score__star').innerHTML = (score_star +=50);
-                destroyObj(object, index, element);
-            }
             }, 20);
         });
-        
-                            
+
+
         let list_fuel = [];
 
         list_fuel = [...document.querySelectorAll(".fuel")];
         list_fuel.forEach((element, index, object) => {
-            let idInterval = setInterval(() => {
-
-                let offset = parseInt(element.style.top);
-                if (offset < 788) {
-                    element.style.top = (offset + 1) + "px";
-                    // console.log(element.style.left + "  aa  " + offset);
-                }else{
+            let idIntervalFuel = setInterval(() => {
+                if (!isCrash(element, plane)) {
+                    let offset = parseInt(element.style.top);
+                    if (offset < 788) {
+                        element.style.top = (offset + 1) + "px";
+                    } else {
+                        clearInterval(idIntervalFuel);                      
+                        destroyObj(object, index, element);
+                    }
+                } else {
+                    clearInterval(idIntervalFuel);
+                    document.getElementById('score__fuel').innerHTML = (score__fuel += 50);
                     destroyObj(object, index, element);
-                }
+                }            
             }, 20);
         });
     };
@@ -299,36 +254,36 @@ const factoryMove = (() => {
 
 
 //////////////////////////////////
-function init(){
+function init() {
     px1 = parseInt(plane.style.left);
-    px2 = parseInt(plane.style.left) +  parseInt(plane.offsetWidth);
+    px2 = parseInt(plane.style.left) + parseInt(plane.offsetWidth);
     py1 = parseInt(plane.style.top);
-    py2 = parseInt(plane.style.top)  +  parseInt(plane.offsetHeight);
+    py2 = parseInt(plane.style.top) + parseInt(plane.offsetHeight);
 }
 
-var px1 =0;
-var px2 =0;
-var py1 =0;
-var py2 =0;
+var px1 = 0;
+var px2 = 0;
+var py1 = 0;
+var py2 = 0;
 
 
 // сейчас залабаем метод который будет отвечать за столкновение 
 ///можно позвонить))
 ///ок
 
-function XXX(element, plane){
+function isCrash(element, plane) {
 
     let obj1 = {
         x: parseInt(element.style.left),
         y: parseInt(element.style.top),
-        width:parseInt(element.style.left) -  parseInt(element.offsetWidth),
-        height:parseInt(element.style.top)  +  parseInt(element.offsetHeight)
+        width: parseInt(element.style.left) - parseInt(element.offsetWidth),
+        height: parseInt(element.style.top) + parseInt(element.offsetHeight)
     };
     let obj2 = {
         x: parseInt(plane.style.left),
         y: parseInt(plane.style.top),
-        width:parseInt(plane.style.left) -  parseInt(plane.offsetWidth),
-        height:parseInt(plane.style.top)  +  parseInt(plane.offsetHeight)
+        width: parseInt(plane.style.left) - parseInt(plane.offsetWidth),
+        height: parseInt(plane.style.top) + parseInt(plane.offsetHeight)
     };
 
 
@@ -336,52 +291,31 @@ function XXX(element, plane){
     let xColl = false;
     let yColl = false;
 
-    if((obj1.x + obj1.width >=obj2.x)&&(obj1.x <=obj2.x + obj2.width)) xColl =true;
-    if((obj1.y + obj1.height >=obj2.y)&&(obj1.y <=obj2.y + obj2.height)) yColl =true;
+    if ((obj1.x + obj1.width >= obj2.x) && (obj1.x <= obj2.x + obj2.width)) xColl = true;
+    if ((obj1.y + obj1.height >= obj2.y) && (obj1.y <= obj2.y + obj2.height)) yColl = true;
 
-        if(xColl&yColl) {
-            return true;
-        }
-        return false;
-}
-
-function isCrash(element){
-    let ex1 = parseInt(element.style.left);
-    let ex2 = parseInt(element.style.left) +  parseInt(element.offsetWidth);
-    let ey1 = parseInt(element.style.top);
-    let ey2 = parseInt(element.style.top)  +  parseInt(element.offsetHeight);
-    console.log( ex1-px2 ) 
-   
-    return ( (parseInt(element.offsetWidth) + parseInt(plane.offsetWidth)) < ex2-px1  )
-    //&&
-    //( (parseInt(element.offsetHeight) + parseInt(element.style.top)) > (py1 + parseInt(plane.offsetHeight)) )
-    ;
-    /*if(ey1<py1<ey2 && ex1<px1<ex2){
-        console.log(ey1<py1<ey2 && ex1<px1<ex2)
-        return false;
+    if (xColl & yColl) {
+        return true;
     }
-    console.log(ey1<py1<ey2 && ex1<px1<ex2)
-    return true;*/
-
+    return false;
 }
 
 
 
-
-const factoryMovePlane = (() =>{
+const factoryMovePlane = (() => {
     planeUp = () => {
         let offset = parseInt(plane.style.top);
-        if(offset > 0){
-            plane.style.top = (offset - 5) +'px';
+        if (offset > 0) {
+            plane.style.top = (offset - 7) + 'px';
             // plane.style.top = (parseInt(plane.style.top) - 20) +'px';
         }
     }
 
     planeDown = () => {
         let offset = parseInt(plane.style.top);
-        if(offset => 0){
-            if(offset < 620){
-                plane.style.top = (offset + 5) +'px';
+        if (offset => 0) {
+            if (offset < 620) {
+                plane.style.top = (offset + 7) + 'px';
             }
             // plane.style.top = (parseInt(plane.style.top) - 20) +'px';
         }
@@ -392,8 +326,8 @@ const factoryMovePlane = (() =>{
 
     planeLeft = () => {
         let offset = parseInt(plane.style.left);
-        if(offset > 0 ){
-            plane.style.left = (offset - 5) +'px';
+        if (offset > 0) {
+            plane.style.left = (offset - 7) + 'px';
         }
         // plane.style.left = (parseInt(plane.style.left) - 20) +'px';
     }
@@ -401,9 +335,9 @@ const factoryMovePlane = (() =>{
     planeRight = () => {
         let offset = parseInt(plane.style.left);
         console.log(offset);
-        if(offset => 0){
-            if (offset < 860){
-                plane.style.left = (offset + 5) +'px';
+        if (offset => 0) {
+            if (offset < 860) {
+                plane.style.left = (offset + 7) + 'px';
             }
         }
         // plane.style.left = (parseInt(plane.style.left) + 20) +'px';
@@ -419,52 +353,52 @@ const factoryMovePlane = (() =>{
 
 
 //TIMER
-let s=0;
-let m=0;
-setInterval(()=>{
-s++;
-if(s===60){
-   s=0;
-   m++
-}
-if(s<10){
-    document.getElementById('timer').innerHTML = (m + ":0" + s);
-}else{
-    document.getElementById('timer').innerHTML = (m + ":" + s);
-}
-},1000);
+let s = 0;
+let m = 0;
+setInterval(() => {
+    s++;
+    if (s === 60) {
+        s = 0;
+        m++
+    }
+    if (s < 10) {
+        document.getElementById('timer').innerHTML = (m + ":0" + s);
+    } else {
+        document.getElementById('timer').innerHTML = (m + ":" + s);
+    }
+}, 1000);
 
 //Обратный таймер
 
-let ss= 10;
-let mm=0;
-let pidTimer = setInterval(()=> {
-    if (ss===0){
+let score__fuel = 10;
+let mm = 0;
+let pidTimer = setInterval(() => {
+    if (score__fuel === 0) {
         alert("GameOver");
         return clearInterval(pidTimer);
     }
-    ss--;
+    score__fuel--;
 
-    let sss = ss % 60;
-    let mmm = Math.floor(ss / 60);
-    if (sss % 60 == 0){
-        sss=0;
-        if (mmm > 0){
+    let sss = score__fuel % 60;
+    let mmm = Math.floor(score__fuel / 60);
+    if (sss % 60 == 0) {
+        sss = 0;
+        if (mmm > 0) {
             mmm--;
         }
     }
-    if(sss<10){
+    if (sss < 10) {
         document.getElementById('score__fuel').innerHTML = (mmm + ":0" + sss);
-    }else{
+    } else {
         document.getElementById('score__fuel').innerHTML = (mmm + ":" + sss);
     }
-},1000);
+}, 1000);
 
 //UP SHIFT
-function changeFontSize(command){
-    if(command === "plus"){
+function changeFontSize(command) {
+    if (command === "plus") {
         let fSize = document.querySelector('score__fuel');
-        fSize.style.fontSize = (parseInt(fSize.style.fontSize)+ 2) + "px";
+        fSize.style.fontSize = (parseInt(fSize.style.fontSize) + 2) + "px";
         alert(fSize.style.fontSize + "d");
     }
 };
@@ -485,7 +419,7 @@ function changeFontSize(command){
 
 
 ////MODAL
-function showModal(){
+function showModal() {
     var modalWin = document.getElementById('root');
     modalWin.style.display = 'block';
     var dontModal = document.getElementById('popup');
