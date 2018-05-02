@@ -105,6 +105,23 @@ const lifecycle = (() => {
 
     stop = () => {
         console.log("stop");
+
+
+        //ajax
+        let xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                alert(this.responseText);
+                let tableRecord = [...JSON.parse(this.responseText)];
+                tableRecord.sort((a,b)=>{
+                    return b.stars-a.stars;
+                });
+                alert(JSON.stringify(tableRecord));
+            }
+        }
+        xhr.open("GET", "http://ws1/index.php?resultTable="+JSON.stringify(resultTable), true);
+        xhr.send();
+
     }
 
     create = () => {
@@ -119,12 +136,19 @@ const lifecycle = (() => {
         return score__fuel += 10;
     }
 
+    addToCookies = () => {
+        document.cookie = "resultTableItem=a" + resultTableItem + ";";
+        alert(document.cookie);
+        console.log(document.cookie)
+    }
+
     return {
         startAnimation,
         start,
         stop,
         create,
-        addFuel
+        addFuel,
+        addToCookies
     }
 })();
 
@@ -133,11 +157,10 @@ const factoryMove = (() => {
     destroyObj = (list_array, i, element) => {
         if (element.parentNode == null) return;
         list_array.splice(i, 1);
-        element.parentNode.removeChild(element);       
+        element.parentNode.removeChild(element);
     }
 
     fromRightToLeft = () => {
-        //console.log("fromRightToLeft");
         let list_bird = [];
         list_bird = [...document.querySelectorAll(".bird")];
         let idIntervalBird = setInterval(() => {
@@ -214,14 +237,14 @@ const factoryMove = (() => {
                     if (offset < 788) {
                         element.style.top = (offset + 1) + "px";
                     } else {
-                        clearInterval(idIntervalFuel);                      
+                        clearInterval(idIntervalFuel);
                         destroyObj(object, index, element);
                     }
                 } else {
                     clearInterval(idIntervalFuel);
                     document.getElementById('score__fuel').innerHTML = (score__fuel += 50);
                     destroyObj(object, index, element);
-                }            
+                }
             }, 20);
         });
     };
@@ -280,7 +303,7 @@ function isCrash(element) {
     let obj1 = {
         x: parseInt(element.style.left),
         y: parseInt(element.style.top),
-        width:  parseInt(element.offsetWidth),
+        width: parseInt(element.offsetWidth),
         height: parseInt(element.offsetHeight)
     };
     let obj2 = {
@@ -306,7 +329,7 @@ const factoryMovePlane = (() => {
     planeUp = () => {
         let offset = parseInt(plane.style.top);
         if (offset > 0) {
-            plane.style.top = (offset - 7) + 'px';    
+            plane.style.top = (offset - 7) + 'px';
         }
         this.drawPosition();
     }
@@ -317,7 +340,7 @@ const factoryMovePlane = (() => {
             if (offset < 620) {
                 plane.style.top = (offset + 7) + 'px';
             }
-        }       
+        }
         this.drawPosition();
     }
 
@@ -325,12 +348,12 @@ const factoryMovePlane = (() => {
         let offset = parseInt(plane.style.left);
         if (offset > 0) {
             plane.style.left = (offset - 7) + 'px';
-        }      
+        }
         this.drawPosition();
     }
 
     planeRight = () => {
-        let offset = parseInt(plane.style.left);     
+        let offset = parseInt(plane.style.left);
         if (offset => 0) {
             if (offset < 860) {
                 plane.style.left = (offset + 7) + 'px';
@@ -339,10 +362,10 @@ const factoryMovePlane = (() => {
         this.drawPosition();
     }
 
-    drawPosition = ()=>{
+    drawPosition = () => {
         initPlanePosition();
         let pos = document.querySelector("#position");
-        pos.innerHTML = px1+":"+py1+"; "+px2+":"+py2;
+        pos.innerHTML = px1 + ":" + py1 + "; " + px2 + ":" + py2;
     }
     return {
         planeUp,
@@ -418,6 +441,17 @@ function changeFontSize(command) {
 //     }
 
 
+//PAUSE
+function modalPause() {
+    var txt;
+    if (confirm("Вы находитесь в режиме паузы, нажмите ок для продолжения игры! И отмена для того чтобы начать игру заново")) {
+        txt = "Продолжить";
+    } else {
+        txt = "Заново";
+        location.reload();
+    }
+}
+
 
 ////MODAL
 function showModal() {
@@ -426,4 +460,40 @@ function showModal() {
     var dontModal = document.getElementById('popup');
     dontModal.style.display = 'none';
 }
+
+
+//TABLE
+
+let resultTable = [];
+resultTable.push( {
+    name: "xxx",
+    time: "4:40",
+    stars: 250
+});
+resultTable.push( {
+    name: "bbb",
+    time: "4:40",
+    stars: 234
+});
+resultTable.push( {
+    name: "ccc",
+    time: "4:40",
+    stars: 10
+});
+resultTable.push( {
+    name: "aaa",
+    time: "4:40",
+    stars: 1
+});
+resultTable.push( {
+    name: "TTre",
+    time: "4:40",
+    stars: 234
+});
+
+
+console.log(JSON.stringify(resultTable));
+
+
+/// 
 
