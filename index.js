@@ -112,11 +112,17 @@ const lifecycle = (() => {
         xhr.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 alert(this.responseText);
-                let tableRecord = [...JSON.parse(this.responseText)];
+                let tableRecord = JSON.parse(this.responseText);
                 tableRecord.sort((a,b)=>{
                     return b.stars-a.stars;
                 });
                 alert(JSON.stringify(tableRecord));
+                let tr = document.querySelector("#tableRecord");
+                let r = "";
+                tableRecord.forEach((element)=>{
+                    r+="<h5>"+element.stars+" "+element.name+"</h5>"
+                });
+                tr.innerHTML=r;
             }
         }
         xhr.open("GET", "http://ws1/index.php?resultTable="+JSON.stringify(resultTable), true);
