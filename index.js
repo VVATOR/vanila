@@ -142,7 +142,7 @@ const factoryMove = (() => {
         list_bird = [...document.querySelectorAll(".bird")];
         let idIntervalBird = setInterval(() => {
             list_bird.forEach((element, index, object) => {
-                if (!isCrash(element, plane)) {
+                if (!isCrash(element)) {
                     let offset = parseInt(element.style.left);
                     if (offset > -200) {
                         element.style.left = (offset - 3) + "px";
@@ -157,8 +157,6 @@ const factoryMove = (() => {
                         width: parseInt(element.style.left) - parseInt(element.offsetWidth),
                         height: parseInt(element.style.top) + parseInt(element.offsetHeight)
                     };
-                    console.log("---");
-                    console.log(obj1);
                     clearInterval(idIntervalBird);
                     destroyObj(object, index, element);
                 }
@@ -184,13 +182,12 @@ const factoryMove = (() => {
 
 
     fromTopToDown = () => {
-     //   console.log("fromTopToDown");      
         let list_star = [];
 
         list_star = [...document.querySelectorAll(".star")];
         list_star.forEach((element, index, object) => {
             let idIntervalStar = setInterval(() => {
-                if (!isCrash(element, plane)) {
+                if (!isCrash(element)) {
                     let offset = parseInt(element.style.top);
                     if (offset < 788) {
                         element.style.top = (offset + 1) + "px";
@@ -212,7 +209,7 @@ const factoryMove = (() => {
         list_fuel = [...document.querySelectorAll(".fuel")];
         list_fuel.forEach((element, index, object) => {
             let idIntervalFuel = setInterval(() => {
-                if (!isCrash(element, plane)) {
+                if (!isCrash(element)) {
                     let offset = parseInt(element.style.top);
                     if (offset < 788) {
                         element.style.top = (offset + 1) + "px";
@@ -262,11 +259,11 @@ const factoryMove = (() => {
 
 
 //////////////////////////////////
-function init() {
+function initPlanePosition() {
     px1 = parseInt(plane.style.left);
-    px2 = parseInt(plane.style.left) + parseInt(plane.offsetWidth);
+    px2 = parseInt(plane.offsetWidth);
     py1 = parseInt(plane.style.top);
-    py2 = parseInt(plane.style.top) + parseInt(plane.offsetHeight);
+    py2 = parseInt(plane.offsetHeight);
 }
 
 var px1 = 0;
@@ -279,23 +276,19 @@ var py2 = 0;
 ///можно позвонить))
 ///ок
 
-function isCrash(element, plane) {
-
+function isCrash(element) {
     let obj1 = {
         x: parseInt(element.style.left),
         y: parseInt(element.style.top),
-        width: parseInt(element.style.left) - parseInt(element.offsetWidth),
-        height: parseInt(element.style.top) + parseInt(element.offsetHeight)
+        width:  parseInt(element.offsetWidth),
+        height: parseInt(element.offsetHeight)
     };
     let obj2 = {
-        x: parseInt(plane.style.left),
-        y: parseInt(plane.style.top),
-        width: parseInt(plane.style.left) - parseInt(plane.offsetWidth),
-        height: parseInt(plane.style.top) + parseInt(plane.offsetHeight)
+        x: px1,
+        y: py1,
+        width: px2,
+        height: py2
     };
-
-    
-
 
     let xColl = false;
     let yColl = false;
@@ -309,15 +302,13 @@ function isCrash(element, plane) {
     return false;
 }
 
-
-
 const factoryMovePlane = (() => {
     planeUp = () => {
         let offset = parseInt(plane.style.top);
         if (offset > 0) {
-            plane.style.top = (offset - 7) + 'px';
-            // plane.style.top = (parseInt(plane.style.top) - 20) +'px';
+            plane.style.top = (offset - 7) + 'px';    
         }
+        this.drawPosition();
     }
 
     planeDown = () => {
@@ -326,32 +317,33 @@ const factoryMovePlane = (() => {
             if (offset < 620) {
                 plane.style.top = (offset + 7) + 'px';
             }
-            // plane.style.top = (parseInt(plane.style.top) - 20) +'px';
-        }
-        // plane.style.top = (parseInt(plane.style.top) + 20) +'px';
+        }       
+        this.drawPosition();
     }
-
-    ///// left right
 
     planeLeft = () => {
         let offset = parseInt(plane.style.left);
         if (offset > 0) {
             plane.style.left = (offset - 7) + 'px';
-        }
-        // plane.style.left = (parseInt(plane.style.left) - 20) +'px';
+        }      
+        this.drawPosition();
     }
 
     planeRight = () => {
-        let offset = parseInt(plane.style.left);
-        console.log(offset);
+        let offset = parseInt(plane.style.left);     
         if (offset => 0) {
             if (offset < 860) {
                 plane.style.left = (offset + 7) + 'px';
             }
         }
-        // plane.style.left = (parseInt(plane.style.left) + 20) +'px';
+        this.drawPosition();
     }
 
+    drawPosition = ()=>{
+        initPlanePosition();
+        let pos = document.querySelector("#position");
+        pos.innerHTML = px1+":"+py1+"; "+px2+":"+py2;
+    }
     return {
         planeUp,
         planeDown,
