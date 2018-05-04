@@ -1,3 +1,13 @@
+a{
+    outline: none;
+    list-style-type: none;
+    text-decoration: none;
+    color: pink;
+}
+a:hover{
+    color: #fff;
+}
+
 #container{
     position: relative;
 }
@@ -9,8 +19,11 @@
     left:50%;
     margin-left: -512px;
     border: 1px solid red;
-    overflow:hidden;
-    display: none;
+    overflow: hidden;
+}
+
+.button{
+    position: absolute;
 }
 
 .cloud{
@@ -140,7 +153,8 @@
     left: 70px;
     font-weight: bold;
     color:#fff;
-    display: block;
+    display: flex;
+    align-items: center;
 }
 
 #score__fuel{
@@ -152,7 +166,8 @@
     font-size: 2.5rem;
     font-weight: bold;
     color:#fff;
-    display: block;
+    display: flex;
+    align-items: center;
 }
 
 #score__star{
@@ -164,7 +179,8 @@
     font-size: 2.5rem;
     font-weight: bold;
     color:#fff;
-    display: block;
+    display: flex;
+    align-items: center;
 }
 
 
@@ -309,8 +325,9 @@ border-radius: 50%;
 .popup .prove{
     width: 70%;
     position: absolute;
-    right: 0;
+    right: 0px;
     top: 0;
+    /* display: none; */
 }
 
 .prove h2{
@@ -323,6 +340,8 @@ border-radius: 50%;
     line-height: 27px;
     letter-spacing: -2px;
 }
+
+
 .popup .btn-startgame{
     font-weight: bold;
     font-size: 2.1rem;

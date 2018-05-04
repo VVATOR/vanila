@@ -16,15 +16,15 @@
  --></head>
 <body>
     <div id="container">
-        <div id="startAnimation" onclick="lifecycle.startAnimation()">starAnimation</div>
-        <div id="start" onclick="lifecycle.start()">start</div>
-        <div id="stop" onclick="lifecycle.stop()">stop</div>
-        <div id="create" onclick="lifecycle.create()">CreateRandom</div>   
-        <div id="create" onclick="lifecycle.addFuel()">ADDFuel</div>   
-        <div id="addToCookies" onClick="lifecycle.addToCookies()">addToCookies</div>
-        
-        <div id="tableRecord">tableRecord</div>
-        
+        <div class="button">
+            <div id="startAnimation" onclick="lifecycle.startAnimation()">starAnimation</div>
+            <div id="start" onclick="lifecycle.start()">start</div>
+            <div id="stop" onclick="lifecycle.stop()">stop</div>
+            <div id="create" onclick="lifecycle.create()">CreateRandom</div>   
+            <div id="create" onclick="lifecycle.addFuel()">ADDFuel</div>   
+            <div id="addToCookies" onClick="lifecycle.addToCookies()">addToCookies</div>
+            <div id="tableRecord">tableRecord</div>
+        </div>
  
         <div id="root">
 
@@ -43,13 +43,13 @@
                 <source src="http://upload.wikimedia.org/wikipedia/commons/5/59/C_major_scale.ogg" type="audio/ogg; codecs=vorbis" />
             </audio>
 
-            <div id="shrift_up" class="btn" onClick="changeFontSize('plus')"></div>
-            <div id="shrift_down" class="btn"></div>
+            <div id="shrift_up" class="btn" onClick="lifecycle.changeFontSize('plus')"></div>
+            <div id="shrift_down" class="btn" onClick="lifecycle.changeFontSize('minus')"></div>
             <div id="pause" class="btn" onclick="modalPause()"></div>
 
 
-            <div id="btn_up" class="btn btn_game" onMouseMove="planeUp()"></div>
-            <div id="btn_down" class="btn btn_game" onMouseMove="planeDown()"></div>   
+            <div id="btn_up" class="btn btn_game" onMouseMove="planeUp()" onMouseOut="planeDefault()"></div>
+            <div id="btn_down" class="btn btn_game" onMouseMove="planeDown()" onMouseOut="planeDefault()"></div>   
             <div id="btn_left" class="btn btn_game" onMouseMove="planeLeft()"></div>
             <div id="btn_right" class="btn btn_game" onMouseMove="planeRight()"></div> 
 
@@ -74,7 +74,7 @@
 
 
 
-        <div id="popup" class="popup">
+        <!-- <div id="popup" class="popup">
                 <img src="image/logo.png" alt="logo">
                 <div class="btn-startgame" onclick="showModal()">START GAME</div>
                 <div class="prove">
@@ -94,7 +94,7 @@
                         Battle in space with Adventure plane ChampionPlane...<br/>
                     </p>
                 </div>
-            </div>
+            </div> -->
 
     </div>
 
@@ -110,7 +110,6 @@
             <br> <p> УРа!!!!!!!!!! </p>
             <hr>
         </div>
-
 
     <script>
         var plane = document.querySelector('#plane'); 

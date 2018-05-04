@@ -142,11 +142,30 @@ const lifecycle = (() => {
         return score__fuel += 10;
     }
 
+
+    changeFontSize = (command) => {
+        let el = document.querySelector('*');
+        let style = window.getComputedStyle(el, null).getPropertyValue('font-size');
+        let fontSize = parseFloat(style); 
+        if (command === "plus") { 
+            if (fontSize < 20){          
+                el.style.fontSize = (fontSize + 3) + 'px';      
+            }
+        }else{  
+            if (fontSize > 5){           
+                el.style.fontSize = (fontSize - 3) + 'px';
+            }
+        }
+    }
+
     addToCookies = () => {
         document.cookie = "resultTableItem=a" + resultTableItem + ";";
         alert(document.cookie);
         console.log(document.cookie)
     }
+
+
+    
 
     return {
         startAnimation,
@@ -154,7 +173,8 @@ const lifecycle = (() => {
         stop,
         create,
         addFuel,
-        addToCookies
+        addToCookies,
+        changeFontSize
     }
 })();
 
@@ -180,12 +200,12 @@ const factoryMove = (() => {
                         destroyObj(object, index, element);
                     }
                 } else {
-                    let obj1 = {
-                        x: parseInt(element.style.left),
-                        y: parseInt(element.style.top),
-                        width: parseInt(element.style.left) - parseInt(element.offsetWidth),
-                        height: parseInt(element.style.top) + parseInt(element.offsetHeight)
-                    };
+                    // let obj1 = {
+                    //     x: parseInt(element.style.left),
+                    //     y: parseInt(element.style.top),
+                    //     width: parseInt(element.style.left) - parseInt(element.offsetWidth),
+                    //     height: parseInt(element.style.top) + parseInt(element.offsetHeight)
+                    // };
                     clearInterval(idIntervalBird);
                     destroyObj(object, index, element);
                 }
@@ -195,18 +215,17 @@ const factoryMove = (() => {
 
         let list_cloud = [];
         list_cloud = [...document.querySelectorAll(".cloud")];
-        let idIntervalCloud = setInterval(() => {
-            list_cloud.forEach((element, index, object) => {
-
+        list_cloud.forEach((element, index, object) => {
+            let idIntervalCloud = setInterval(() => {
                 let offset = parseInt(element.style.left);
                 if (offset > -200) {
                     element.style.left = (offset - 1) + "px";
                 } else {
                     clearInterval(idIntervalCloud);
-                    destroyObj(object, index, element, idIntervalCloud);
+                    destroyObj(object, index, element);
                 }
-            })
-        }, 3);
+            }, 3);
+         })
     };
 
 
@@ -226,8 +245,8 @@ const factoryMove = (() => {
                     }
                 } else {
                     clearInterval(idIntervalStar);
-                    document.getElementById('score__star').innerHTML = (score_star += 50);
                     destroyObj(object, index, element);
+                    document.getElementById('score__star').innerHTML = (score_star += 1);
                 }
             }, 20);
         });
@@ -337,6 +356,9 @@ const factoryMovePlane = (() => {
         if (offset > 0) {
             plane.style.top = (offset - 7) + 'px';
         }
+       // plane.style.transform = "rotate(-45deg);";
+        // Standard syntax
+        plane.style.transform = "rotate(-10deg)";
         this.drawPosition();
     }
 
@@ -347,6 +369,7 @@ const factoryMovePlane = (() => {
                 plane.style.top = (offset + 7) + 'px';
             }
         }
+        plane.style.transform = "rotate(10deg)";
         this.drawPosition();
     }
 
@@ -373,11 +396,16 @@ const factoryMovePlane = (() => {
         let pos = document.querySelector("#position");
         pos.innerHTML = px1 + ":" + py1 + "; " + px2 + ":" + py2;
     }
+
+    planeDefault = () => {
+        plane.style.transform = "rotate(0deg)";
+    }
     return {
         planeUp,
         planeDown,
         planeLeft,
-        planeRight
+        planeRight,
+        planeDefault
     }
 })();
 
@@ -404,7 +432,8 @@ let score__fuel = 10;
 let mm = 0;
 let pidTimer = setInterval(() => {
     if (score__fuel === 0) {
-        alert("GameOver");
+        // alert("GameOver");
+        gameOver();
         return clearInterval(pidTimer);
     }
     score__fuel--;
@@ -424,14 +453,22 @@ let pidTimer = setInterval(() => {
     }
 }, 1000);
 
+//gameover
+
+function gameOver() {
+    prompt("Вы проиграли, напишите Ваше имя чтобы попасть в таблицу рекордов!!!");
+}
+
+
+
 //UP SHIFT
-function changeFontSize(command) {
-    if (command === "plus") {
-        let fSize = document.querySelector('score__fuel');
-        fSize.style.fontSize = (parseInt(fSize.style.fontSize) + 2) + "px";
-        alert(fSize.style.fontSize + "d");
-    }
-};
+// function changeFontSize(command) {
+//     if (command === "plus") {
+//         let fSize = document.querySelector('score__fuel');
+//         fSize.style.fontSize = (parseInt(fSize.style.fontSize) + 2) + "px";
+//         alert(fSize.style.fontSize + "d");
+//     }
+// };
 
 
 
@@ -458,14 +495,21 @@ function modalPause() {
     }
 }
 
+///animation proive
+$('.prove').fadeIn('slow');
+
 
 ////MODAL
-function showModal() {
-    var modalWin = document.getElementById('root');
-    modalWin.style.display = 'block';
-    var dontModal = document.getElementById('popup');
-    dontModal.style.display = 'none';
-}
+// function showModal() {
+//     var modalWin = document.getElementById('root');
+//     modalWin.style.display = 'block';
+//     var dontModal = document.getElementById('popup');
+//     dontModal.style.display = 'none';
+// }
+
+//
+
+
 
 
 //TABLE
