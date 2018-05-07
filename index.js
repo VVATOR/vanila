@@ -55,7 +55,7 @@ const factoryA = (() => {
         }
         console.log(className + " create");
         let obj = document.createElement("div");
-        let text = document.createTextNode(className);
+       // let text = document.createTextNode(className);
         obj.setAttribute("class", className);
 
 
@@ -71,7 +71,7 @@ const factoryA = (() => {
             return;
         }
 
-        obj.appendChild(text);
+       // obj.appendChild(text);
         let root = document.getElementById("root");
         root.appendChild(obj);
     }
@@ -100,7 +100,7 @@ const lifecycle = (() => {
             factoryMove.fromTopToDown();
             factoryMove.fromRightToLeft(); //ускоряет
 
-        }, 1000);
+        }, 500);
     }
 
     stop = () => {
@@ -132,8 +132,7 @@ const lifecycle = (() => {
 
     create = () => {
         console.log("create");
-        console.log(list[3]);
-
+       
         let value = getRandom(0, list.length);
         factoryA.getInstance(list[value]);
     }
@@ -144,16 +143,23 @@ const lifecycle = (() => {
 
 
     changeFontSize = (command) => {
+        let img = document.querySelector('#img_score_fuel');
+        let listImg = document.querySelectorAll('img')
+
         let el = document.querySelector('*');
-        let style = window.getComputedStyle(el, null).getPropertyValue('font-size');
-        let fontSize = parseFloat(style); 
+        let imgW = parseFloat(window.getComputedStyle(img, null).getPropertyValue('width'));        
+        let sizeFont = parseFloat(window.getComputedStyle(el, null).getPropertyValue('font-size'));
+       // let  = style); 
         if (command === "plus") { 
-            if (fontSize < 20){          
-                el.style.fontSize = (fontSize + 3) + 'px';      
+            if (sizeFont < 20){          
+                img.style.width = (imgW + 1)+'px'; 
+                el.style.fontSize = (sizeFont + 3) + 'px';      
             }
         }else{  
-            if (fontSize > 5){           
-                el.style.fontSize = (fontSize - 3) + 'px';
+            if (sizeFont > 5){ 
+                img.style.width = (imgW - 2)+'px';     
+                // img.style.width = '20px';      
+                el.style.fontSize = (sizeFont - 2) + 'px';
             }
         }
     }
@@ -298,31 +304,22 @@ const factoryMove = (() => {
     }
 })();
 
-
-
-
-
-
-
-
-
 //////////////////////////////////
+
+let jsonPlane = {
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0
+};
 function initPlanePosition() {
-    px1 = parseInt(plane.style.left);
-    px2 = parseInt(plane.offsetWidth);
-    py1 = parseInt(plane.style.top);
-    py2 = parseInt(plane.offsetHeight);
+    jsonPlane = {
+        x: parseInt(plane.style.left),
+        y: parseInt(plane.style.top),
+        width: parseInt(plane.offsetWidth),
+        height: parseInt(plane.offsetHeight)
+    };
 }
-
-var px1 = 0;
-var px2 = 0;
-var py1 = 0;
-var py2 = 0;
-
-
-// сейчас залабаем метод который будет отвечать за столкновение 
-///можно позвонить))
-///ок
 
 function isCrash(element) {
     let obj1 = {
@@ -331,18 +328,13 @@ function isCrash(element) {
         width: parseInt(element.offsetWidth),
         height: parseInt(element.offsetHeight)
     };
-    let obj2 = {
-        x: px1,
-        y: py1,
-        width: px2,
-        height: py2
-    };
+    
 
     let xColl = false;
     let yColl = false;
 
-    if ((obj1.x + obj1.width >= obj2.x) && (obj1.x <= obj2.x + obj2.width)) xColl = true;
-    if ((obj1.y + obj1.height >= obj2.y) && (obj1.y <= obj2.y + obj2.height)) yColl = true;
+    if ((obj1.x + obj1.width >= jsonPlane.x) && (obj1.x <= jsonPlane.x + jsonPlane.width)) xColl = true;
+    if ((obj1.y + obj1.height >= jsonPlane.y) && (obj1.y <= jsonPlane.y + jsonPlane.height)) yColl = true;
 
     if (xColl & yColl) {
         return true;
@@ -350,14 +342,16 @@ function isCrash(element) {
     return false;
 }
 
+///////////////////////
+
+
+
 const factoryMovePlane = (() => {
     planeUp = () => {
         let offset = parseInt(plane.style.top);
         if (offset > 0) {
             plane.style.top = (offset - 7) + 'px';
         }
-       // plane.style.transform = "rotate(-45deg);";
-        // Standard syntax
         plane.style.transform = "rotate(-10deg)";
         this.drawPosition();
     }
@@ -394,7 +388,8 @@ const factoryMovePlane = (() => {
     drawPosition = () => {
         initPlanePosition();
         let pos = document.querySelector("#position");
-        pos.innerHTML = px1 + ":" + py1 + "; " + px2 + ":" + py2;
+        // pos.innerHTML = px1 + ":" + py1 + "; " + px2 + ":" + py2;
+        //jsonPlane
     }
 
     planeDefault = () => {

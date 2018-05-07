@@ -29,7 +29,7 @@
         <div id="root">
 
             <div id="score_star">
-                <img src="image/star.png" alt="star">
+                <img id="img_score_fuel" src="image/star.png" alt="star">
                 <div id="score__star"></div>
             </div>
 
@@ -45,7 +45,7 @@
 
             <div id="shrift_up" class="btn" onClick="lifecycle.changeFontSize('plus')"></div>
             <div id="shrift_down" class="btn" onClick="lifecycle.changeFontSize('minus')"></div>
-            <div id="pause" class="btn" onclick="modalPause()"></div>
+            <div id="pause" class="btn" onclick="showModal()"></div>
 
 
             <div id="btn_up" class="btn btn_game" onMouseMove="planeUp()" onMouseOut="planeDefault()"></div>
@@ -111,8 +111,7 @@
             <hr>
         </div>
 
-    <script>
-        var plane = document.querySelector('#plane'); 
+    <script> 
 
         // MODAL PAUSE
 // function modalPause() {
@@ -144,19 +143,23 @@
     */
 
     let myAudio = document.getElementById('myaudio');
-   /// myAudio.paused = true;
-   // document.getElementById('myaudio').play();
+    myAudio.paused = true;
+    myAudio.play();
+    //document.getElementById('myaudio').play();
 
-    document.getElementById('btn_sound').onclick = function(){
+   let btn = document.getElementById('btn_sound');
+   btn.onclick = function(){
      
      if (myAudio.paused == true){
-         document.getElementById('myaudio').play();
+         myAudio.play();
          this.style.backgroundImage = "url('image/audio_on.png')";
      } else if(myAudio.paused == false){
-        document.getElementById('myaudio').pause();
+        myAudio.pause();
         this.style.backgroundImage = "url('image/audio_off.png')";
      }
  }
+
+ 
     </script>
 </body>
 </html>

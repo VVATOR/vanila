@@ -239,7 +239,7 @@ border-radius: 50%;
 
 #score_star img{
     width:50px;
-    height:43px;
+    height:auto;
 }
 
 #score__star{
