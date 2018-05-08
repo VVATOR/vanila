@@ -1,3 +1,8 @@
+const H_LINE_START = 1024;
+const H_LINE_FINAL = 0;
+const W_LINE_START = 768;
+const W_LINE_FINAL = 100;
+
 const TYPE_CLOUD = "cloud";
 const TYPE_BIRD = "bird";
 const TYPE_PLANE = "plane";
@@ -5,16 +10,17 @@ const TYPE_FUEL = "fuel";
 const TYPE_STAR = "star";
 
 const TYPE_CLOUD_P = 100;
-const TYPE_BIRD_P = 50;
+const TYPE_BIRD_P = 80;
 const TYPE_PLANE_P = 0;
-const TYPE_FUEL_P = 30;
+const TYPE_FUEL_P = 20;
 const TYPE_STAR_P = 70;
 
-let score__star = { value: 0 };
-let score__fuel = { value: 50 };
+let score_star = 0;
+
 
 let list = [TYPE_CLOUD, TYPE_BIRD, TYPE_PLANE, TYPE_FUEL, TYPE_STAR];
 let list_p = [TYPE_CLOUD_P, TYPE_BIRD_P, TYPE_PLANE_P, TYPE_FUEL_P, TYPE_STAR_P];
+
 
 function getRandom(min, max) {
     let r = Math.floor(Math.random() * (max - min)) + min;
@@ -22,8 +28,11 @@ function getRandom(min, max) {
 }
 
 const factoryA = (() => {
+    getInstance = (objectType) => {
+        return this.privateElementGenerator(objectType);
+    }
 
-    getInstance = (className) => {
+    privateElementGenerator = (className) => {
         let baseKoef = getRandom(0, 100);
         let index = 0;
         for (let i = 0; i < list.length; i++) {
@@ -44,8 +53,11 @@ const factoryA = (() => {
         if (!isCorrect) {
             className = TYPE_CLOUD;
         }
+        console.log(className + " create");
         let obj = document.createElement("div");
+       // let text = document.createTextNode(className);
         obj.setAttribute("class", className);
+
 
         if (className === TYPE_BIRD) {
             obj.setAttribute("style", "top: " + getRandom(50, 750) + "px; left: " + 1040 + "px");
@@ -59,14 +71,9 @@ const factoryA = (() => {
             return;
         }
 
+       // obj.appendChild(text);
         let root = document.getElementById("root");
         root.appendChild(obj);
-
-        let jsObj = {
-            type: className,
-            html: obj
-        }
-        return jsObj
     }
 
     return {
@@ -77,67 +84,81 @@ const factoryA = (() => {
 const lifecycle = (() => {
 
     startAnimation = () => {
+        console.log("create");
+
+        factoryMove.fromTopToDown();
+        factoryMove.fromRightToLeft();
     }
 
     start = () => {
         console.log("start");
+
+
         let idInterval = setInterval(() => {
+
             lifecycle.create();
+            factoryMove.fromTopToDown();
+            factoryMove.fromRightToLeft(); //ускоряет
+
         }, 500);
     }
 
     stop = () => {
         console.log("stop");
+
+
         //ajax
         let xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function () {
+        xhr.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 alert(this.responseText);
                 let tableRecord = JSON.parse(this.responseText);
-                tableRecord.sort((a, b) => {
-                    return b.stars - a.stars;
+                tableRecord.sort((a,b)=>{
+                    return b.stars-a.stars;
                 });
                 alert(JSON.stringify(tableRecord));
                 let tr = document.querySelector("#tableRecord");
                 let r = "";
-                tableRecord.forEach((element) => {
-                    r += "<h5>" + element.stars + " " + element.name + "</h5>"
+                tableRecord.forEach((element)=>{
+                    r+="<h5>"+element.stars+" "+element.name+"</h5>"
                 });
-                tr.innerHTML = r;
+                tr.innerHTML=r;
             }
         }
-        xhr.open("GET", "http://ws1/index.php?resultTable=" + JSON.stringify(resultTable), true);
+        xhr.open("GET", "http://ws1/index.php?resultTable="+JSON.stringify(resultTable), true);
         xhr.send();
+
     }
 
     create = () => {
         console.log("create");
-
+       
         let value = getRandom(0, list.length);
-        let jsObj = factoryA.getInstance(list[value]);
-
-        jsObj = factoryMove.getAnimation(jsObj);
+        factoryA.getInstance(list[value]);
     }
 
     addFuel = () => {
         return score__fuel += 10;
     }
 
+
     changeFontSize = (command) => {
         let img = document.querySelector('#img_score_fuel');
         let listImg = document.querySelectorAll('img')
 
         let el = document.querySelector('*');
-        let imgW = parseFloat(window.getComputedStyle(img, null).getPropertyValue('width'));
+        let imgW = parseFloat(window.getComputedStyle(img, null).getPropertyValue('width'));        
         let sizeFont = parseFloat(window.getComputedStyle(el, null).getPropertyValue('font-size'));
-        if (command === "plus") {
-            if (sizeFont < 20) {
-                img.style.width = (imgW + 1) + 'px';
-                el.style.fontSize = (sizeFont + 3) + 'px';
+       // let  = style); 
+        if (command === "plus") { 
+            if (sizeFont < 20){          
+                img.style.width = (imgW + 1)+'px'; 
+                el.style.fontSize = (sizeFont + 3) + 'px';      
             }
-        } else {
-            if (sizeFont > 5) {
-                img.style.width = (imgW - 2) + 'px';
+        }else{  
+            if (sizeFont > 5){ 
+                img.style.width = (imgW - 2)+'px';     
+                // img.style.width = '20px';      
                 el.style.fontSize = (sizeFont - 2) + 'px';
             }
         }
@@ -148,6 +169,10 @@ const lifecycle = (() => {
         alert(document.cookie);
         console.log(document.cookie)
     }
+
+
+    
+
     return {
         startAnimation,
         start,
@@ -160,73 +185,115 @@ const lifecycle = (() => {
 })();
 
 const factoryMove = (() => {
-    moveFromTopTemplateONE = (jsObj, offsetValue, scoreAddValue, score__obj) => {
-        let element = jsObj.html;
-        let idIntervalElement = setInterval(() => {
-            if (!isCrash(element)) {
-                let offset = parseInt(element.style.top);
-                if (offset < 788) {
-                    element.style.top = (offset + offsetValue) + "px";
-                } else {
-                    clearInterval(idIntervalElement);
-                    destroyObjONE(element);
-                }
-            } else {
-                clearInterval(idIntervalElement);
-                destroyObjONE(element);
-                document.getElementById('score__' + jsObj.type).innerHTML = (score__obj.value += scoreAddValue);
-            }
-        }, 20);
-    }
 
-    moveFromRightTemplateONE = (jsObj, offsetValue, elementForCrash, speed) => {
-        let element = jsObj.html;
-        let idIntervalElement = setInterval(() => {
-            if (!isCrash(element) || !elementForCrash) {
-                let offset = parseInt(element.style.left);
-                if (offset > -200) {
-                    element.style.left = (offset - offsetValue) + "px";
-                } else {
-                    clearInterval(idIntervalElement);
-                    destroyObjONE(element);
-                }
-            } else {
-                clearInterval(idIntervalElement);
-                destroyObjONE(element);
-            }
-        }, speed);
-    }
-
-    destroyObjONE = (element) => {
+    destroyObj = (list_array, i, element) => {
         if (element.parentNode == null) return;
+        list_array.splice(i, 1);
         element.parentNode.removeChild(element);
     }
 
-    getAnimation = (jsObj) => {
-        let speed = 30;
-        let elementForCrash = false;
-        switch (jsObj.type) {
+    fromRightToLeft = () => {
+        let list_bird = [];
+        list_bird = [...document.querySelectorAll(".bird")];
+        let idIntervalBird = setInterval(() => {
+            list_bird.forEach((element, index, object) => {
+                if (!isCrash(element)) {
+                    let offset = parseInt(element.style.left);
+                    if (offset > -200) {
+                        element.style.left = (offset - 3) + "px";
+                    } else {
+                        clearInterval(idIntervalBird);
+                        destroyObj(object, index, element);
+                    }
+                } else {
+                    clearInterval(idIntervalBird);
+                    destroyObj(object, index, element);
+                }
+            })
+        }, 30);
+
+
+        let list_cloud = [];
+        list_cloud = [...document.querySelectorAll(".cloud")];
+        list_cloud.forEach((element, index, object) => {
+            let idIntervalCloud = setInterval(() => {
+                let offset = parseInt(element.style.left);
+                if (offset > -200) {
+                    element.style.left = (offset - 1) + "px";
+                } else {
+                    clearInterval(idIntervalCloud);
+                    destroyObj(object, index, element);
+                }
+            }, 3);
+         })
+    };
+
+
+    fromTopToDown = () => {
+        let list_star = [];
+
+        list_star = [...document.querySelectorAll(".star")];
+        list_star.forEach((element, index, object) => {
+            let idIntervalStar = setInterval(() => {
+                if (!isCrash(element)) {
+                    let offset = parseInt(element.style.top);
+                    if (offset < 788) {
+                        element.style.top = (offset + 1) + "px";
+                    } else {
+                        clearInterval(idIntervalStar);
+                        destroyObj(object, index, element);
+                    }
+                } else {
+                    clearInterval(idIntervalStar);
+                    destroyObj(object, index, element);
+                    document.getElementById('score__star').innerHTML = (score__star += 1);
+                }
+            }, 20);
+        });
+
+
+        let list_fuel = [];
+
+        list_fuel = [...document.querySelectorAll(".fuel")];
+        list_fuel.forEach((element, index, object) => {
+            let idIntervalFuel = setInterval(() => {
+                if (!isCrash(element)) {
+                    let offset = parseInt(element.style.top);
+                    if (offset < 788) {
+                        element.style.top = (offset + 1) + "px";
+                    } else {
+                        clearInterval(idIntervalFuel);
+                        destroyObj(object, index, element);
+                    }
+                } else {
+                    clearInterval(idIntervalFuel);
+                    document.getElementById('score__fuel').innerHTML = (score__fuel += 50);
+                    destroyObj(object, index, element);
+                }
+            }, 20);
+        });
+    };
+
+    getAnimation = (typeObj) => {
+        switch (typeObj) {
             case TYPE_CLOUD:
-                speed = 3;
-                elementForCrash = false;
-                moveFromRightTemplateONE(jsObj, 1, elementForCrash, speed);
-                break;
             case TYPE_BIRD:
-                speed = 30;
-                elementForCrash = true;
-                moveFromRightTemplateONE(jsObj, 3, elementForCrash, speed);
-                break;
+
+
             case TYPE_FUEL:
-                moveFromTopTemplateONE(jsObj, 1, 10, score__fuel);
-                break;
             case TYPE_STAR:
-                moveFromTopTemplateONE(jsObj, 1, 1, score__star);
-                break;
+
+
+            case TYPE_PLANE:
             default:
+
                 break;
         }
     }
+
     return {
+        fromRightToLeft,
+        fromTopToDown,
         getAnimation
     }
 })();
@@ -255,6 +322,7 @@ function isCrash(element) {
         width: parseInt(element.offsetWidth),
         height: parseInt(element.offsetHeight)
     };
+    
 
     let xColl = false;
     let yColl = false;
@@ -269,6 +337,8 @@ function isCrash(element) {
 }
 
 ///////////////////////
+
+
 
 const factoryMovePlane = (() => {
     planeUp = () => {
@@ -312,7 +382,7 @@ const factoryMovePlane = (() => {
     drawPosition = () => {
         initPlanePosition();
         let pos = document.querySelector("#position");
-        //pos.innerHTML = px1 + ":" + py1 + "; " + px2 + ":" + py2;
+        // pos.innerHTML = px1 + ":" + py1 + "; " + px2 + ":" + py2;
         //jsonPlane
     }
 
@@ -328,55 +398,49 @@ const factoryMovePlane = (() => {
     }
 })();
 
-//TIMER
-function timer() {
-    let s = 0;
-    let m = 0;
-    setInterval(() => {
-        s++;
-        if (s === 60) {
-            s = 0;
-            m++
-        }
-        if (s < 10) {
-            document.getElementById('timer').innerHTML = (m + ":0" + s);
-        } else {
-            document.getElementById('timer').innerHTML = (m + ":" + s);
-        }
-    }, 1000);
-}
 
-timer();
+//TIMER
+let s = 0;
+let m = 0;
+setInterval(() => {
+    s++;
+    if (s === 60) {
+        s = 0;
+        m++
+    }
+    if (s < 10) {
+        document.getElementById('timer').innerHTML = (m + ":0" + s);
+    } else {
+        document.getElementById('timer').innerHTML = (m + ":" + s);
+    }
+}, 1000);
 
 //Обратный таймер
 
-function backTimer() {
-    let mm = 0;
-    let pidTimer = setInterval(() => {
-        if (score__fuel.value === 0) {
-            // alert("GameOver");
-            gameOver();
-            return clearInterval(pidTimer);
-        }
-        score__fuel.value--;
+let score__fuel = 10;
+let mm = 0;
+let pidTimer = setInterval(() => {
+    if (score__fuel === 0) {
+        // alert("GameOver");
+        gameOver();
+        return clearInterval(pidTimer);
+    }
+    score__fuel--;
 
-        let sss = score__fuel.value % 60;
-        let mmm = Math.floor(score__fuel.value / 60);
-        if (sss % 60 == 0) {
-            sss = 0;
-            if (mmm > 0) {
-                mmm--;
-            }
+    let sss = score__fuel % 60;
+    let mmm = Math.floor(score__fuel / 60);
+    if (sss % 60 == 0) {
+        sss = 0;
+        if (mmm > 0) {
+            mmm--;
         }
-        if (sss < 10) {
-            document.getElementById('score__fuel').innerHTML = (mmm + ":0" + sss);
-        } else {
-            document.getElementById('score__fuel').innerHTML = (mmm + ":" + sss);
-        }
-    }, 1000);
-}
-
-backTimer();
+    }
+    if (sss < 10) {
+        document.getElementById('score__fuel').innerHTML = (mmm + ":0" + sss);
+    } else {
+        document.getElementById('score__fuel').innerHTML = (mmm + ":" + sss);
+    }
+}, 1000);
 
 //gameover
 
@@ -384,7 +448,30 @@ function gameOver() {
     prompt("Вы проиграли, напишите Ваше имя чтобы попасть в таблицу рекордов!!!");
 }
 
-//MUSIC in html
+
+
+//UP SHIFT
+// function changeFontSize(command) {
+//     if (command === "plus") {
+//         let fSize = document.querySelector('score__fuel');
+//         fSize.style.fontSize = (parseInt(fSize.style.fontSize) + 2) + "px";
+//         alert(fSize.style.fontSize + "d");
+//     }
+// };
+
+
+
+//MUSIC
+// document.getElementById('btn_sound').onclick = function(){
+//     let myAudio = document.getElementById('myaudio');
+//     if (myAudio.paused == true){
+//         document.getElementById('myaudio').play();
+//         this.style.backgroundImage = "url('image/audio_on.png')";
+//     } else if(myAudio.paused == false){
+//        document.getElementById('myaudio').pause();
+//        this.style.backgroundImage = "url('image/audio_off.png')";
+//     }
+
 
 //PAUSE
 function modalPause() {
@@ -400,6 +487,7 @@ function modalPause() {
 ///animation proive
 $('.prove').fadeIn('slow');
 
+
 ////MODAL
 // function showModal() {
 //     var modalWin = document.getElementById('root');
@@ -408,34 +496,43 @@ $('.prove').fadeIn('slow');
 //     dontModal.style.display = 'none';
 // }
 
+//
+
+
+
+
 //TABLE
 
 let resultTable = [];
-resultTable.push({
+resultTable.push( {
     name: "xxx",
     time: "4:40",
     stars: 250
 });
-resultTable.push({
+resultTable.push( {
     name: "bbb",
     time: "4:40",
     stars: 234
 });
-resultTable.push({
+resultTable.push( {
     name: "ccc",
     time: "4:40",
     stars: 10
 });
-resultTable.push({
+resultTable.push( {
     name: "aaa",
     time: "4:40",
     stars: 1
 });
-resultTable.push({
+resultTable.push( {
     name: "TTre",
     time: "4:40",
     stars: 234
 });
+
+
 console.log(JSON.stringify(resultTable));
+
+
 /// 
 
