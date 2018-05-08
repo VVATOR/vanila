@@ -246,7 +246,11 @@ const factoryMove = (() => {
                 } else {
                     clearInterval(idIntervalStar);
                     destroyObj(object, index, element);
+<<<<<<< HEAD
                     document.getElementById('score__star').innerHTML = (score__star += 1);
+=======
+                    document.getElementById('score__star').innerHTML = (score_star += 1);
+>>>>>>> 90bea260b4bea62a4a8bf57da013df7c6cd9ad97
                 }
             }, 20);
         });
