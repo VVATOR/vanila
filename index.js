@@ -11,7 +11,7 @@ const TYPE_FUEL_P = 30;
 const TYPE_STAR_P = 70;
 
 let score__star = { value: 0 };
-let score__fuel = { value: 50 };
+let score__fuel = { value: 110 };
 
 let list = [TYPE_CLOUD, TYPE_BIRD, TYPE_PLANE, TYPE_FUEL, TYPE_STAR];
 let list_p = [TYPE_CLOUD_P, TYPE_BIRD_P, TYPE_PLANE_P, TYPE_FUEL_P, TYPE_STAR_P];
@@ -74,40 +74,47 @@ const factoryA = (() => {
     }
 })();
 
+let endGame = true;
+let srartGameInterval;
 const lifecycle = (() => {
-
+ 
     startAnimation = () => {
     }
 
     start = () => {
+        myAudio.play();
+        timer();
+        backTimer();
         console.log("start");
-        let idInterval = setInterval(() => {
-            lifecycle.create();
-        }, 500);
+        if (endGame === true){
+            srartGameInterval = setInterval(() => {
+                lifecycle.create();
+            }, 500);
+        } 
     }
 
     stop = () => {
         console.log("stop");
         //ajax
-        let xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                alert(this.responseText);
-                let tableRecord = JSON.parse(this.responseText);
-                tableRecord.sort((a, b) => {
-                    return b.stars - a.stars;
-                });
-                alert(JSON.stringify(tableRecord));
-                let tr = document.querySelector("#tableRecord");
-                let r = "";
-                tableRecord.forEach((element) => {
-                    r += "<h5>" + element.stars + " " + element.name + "</h5>"
-                });
-                tr.innerHTML = r;
-            }
-        }
-        xhr.open("GET", "http://ws1/index.php?resultTable=" + JSON.stringify(resultTable), true);
-        xhr.send();
+        // let xhr = new XMLHttpRequest();
+        // xhr.onreadystatechange = function () {
+        //     if (this.readyState == 4 && this.status == 200) {
+        //         alert(this.responseText);
+        //         let tableRecord = JSON.parse(this.responseText);
+        //         tableRecord.sort((a, b) => {
+        //             return b.stars - a.stars;
+        //         });
+        //         alert(JSON.stringify(tableRecord));
+        //         let tr = document.querySelector("#tableRecord");
+        //         let r = "";
+        //         tableRecord.forEach((element) => {
+        //             r += "<h5>" + element.stars + " " + element.name + "</h5>"
+        //         });
+        //         tr.innerHTML = r;
+        //     }
+        // }
+        // xhr.open("GET", "http://ws1/index.php?resultTable=" + JSON.stringify(resultTable), true);
+        // xhr.send();
     }
 
     create = () => {
@@ -124,20 +131,20 @@ const lifecycle = (() => {
     }
 
     changeFontSize = (command) => {
-        let img = document.querySelector('#img_score_fuel');
-        let listImg = document.querySelectorAll('img')
+      //  let img = document.querySelector('#img_score_fuel');
+      //  let listImg = document.querySelectorAll('img')
 
         let el = document.querySelector('*');
-        let imgW = parseFloat(window.getComputedStyle(img, null).getPropertyValue('width'));
+       // let imgW = parseFloat(window.getComputedStyle(img, null).getPropertyValue('width'));
         let sizeFont = parseFloat(window.getComputedStyle(el, null).getPropertyValue('font-size'));
         if (command === "plus") {
             if (sizeFont < 20) {
-                img.style.width = (imgW + 1) + 'px';
+               // img.style.width = (imgW + 1) + 'px';
                 el.style.fontSize = (sizeFont + 3) + 'px';
             }
         } else {
             if (sizeFont > 5) {
-                img.style.width = (imgW - 2) + 'px';
+               // img.style.width = (imgW - 2) + 'px';
                 el.style.fontSize = (sizeFont - 2) + 'px';
             }
         }
@@ -163,7 +170,7 @@ const factoryMove = (() => {
     moveFromTopTemplateONE = (jsObj, offsetValue, scoreAddValue, score__obj) => {
         let element = jsObj.html;
         let idIntervalElement = setInterval(() => {
-            if (!isCrash(element)) {
+            if (!isCrash(jsObj)) {
                 let offset = parseInt(element.style.top);
                 if (offset < 788) {
                     element.style.top = (offset + offsetValue) + "px";
@@ -182,7 +189,7 @@ const factoryMove = (() => {
     moveFromRightTemplateONE = (jsObj, offsetValue, elementForCrash, speed) => {
         let element = jsObj.html;
         let idIntervalElement = setInterval(() => {
-            if (!isCrash(element) || !elementForCrash) {
+            if (!isCrash(jsObj) || !elementForCrash) {
                 let offset = parseInt(element.style.left);
                 if (offset > -200) {
                     element.style.left = (offset - offsetValue) + "px";
@@ -192,7 +199,8 @@ const factoryMove = (() => {
                 }
             } else {
                 clearInterval(idIntervalElement);
-                destroyObjONE(element);
+                destroyObjONE(plane);
+                gameOver();
             }
         }, speed);
     }
@@ -248,7 +256,8 @@ function initPlanePosition() {
     };
 }
 
-function isCrash(element) {
+function isCrash(jsonObj) {
+    let element =jsonObj.html;
     let obj1 = {
         x: parseInt(element.style.left),
         y: parseInt(element.style.top),
@@ -263,6 +272,13 @@ function isCrash(element) {
     if ((obj1.y + obj1.height >= jsonPlane.y) && (obj1.y <= jsonPlane.y + jsonPlane.height)) yColl = true;
 
     if (xColl & yColl) {
+        try{
+            console.log(jsonObj.type);
+            let audio = document.querySelector('#'+jsonObj.type + "Audio");
+            audio.play();
+        } catch (err) {
+
+        }
         return true;
     }
     return false;
@@ -346,7 +362,7 @@ function timer() {
     }, 1000);
 }
 
-timer();
+
 
 //Обратный таймер
 
@@ -376,12 +392,29 @@ function backTimer() {
     }, 1000);
 }
 
-backTimer();
-
 //gameover
 
 function gameOver() {
-    prompt("Вы проиграли, напишите Ваше имя чтобы попасть в таблицу рекордов!!!");
+    
+    endGame = false;
+    $( "#gaveoverbox" ).slideDown( "slow" );
+    $(".btn").css("display","none");
+    $(".score").css("display","none");
+    $(".bird").css("display","none");
+
+    let MyDiv1 = document.getElementById('score__star');
+	let MyDiv2 = document.getElementById('showscor');
+    MyDiv2.innerHTML = MyDiv1.innerHTML;
+    
+
+    var MyDiv3 = document.getElementById('timer');
+	var MyDiv4 = document.getElementById('time');
+    MyDiv4.innerHTML = MyDiv3.innerHTML;
+
+    myAudio.pause();
+
+    clearInterval(srartGameInterval);
+    
 }
 
 //MUSIC in html

@@ -28,24 +28,33 @@
  
         <div id="root">
 
-            <div id="score_star">
+            <div id="score_star" class="score">
                 <img id="img_score_fuel" src="image/star.png" alt="star">
                 <div id="score__star"></div>
             </div>
 
-            <div id="score_fuel">
+            <div id="score_fuel" class="score">
                 <img src="image/fuel_score.png" alt="fuel_score">
                 <div id="score__fuel"></div>
             </div>
 
             <div id="btn_sound" class="btn" ></div>
             <audio id="myaudio">
-                <source src="http://upload.wikimedia.org/wikipedia/commons/5/59/C_major_scale.ogg" type="audio/ogg; codecs=vorbis" />
+                <source src="./music/music.mp3"  />
+            </audio>
+            <audio id="fuelAudio">
+                <source src="./music/fuel.mp3"  />
+            </audio>
+            <audio id="starAudio">
+                <source src="./music/star.mp3"  />
+            </audio>
+            <audio id="birdAudio">
+                <source src="./music/end.mp3"  />
             </audio>
 
             <div id="shrift_up" class="btn" onClick="lifecycle.changeFontSize('plus')"></div>
             <div id="shrift_down" class="btn" onClick="lifecycle.changeFontSize('minus')"></div>
-            <div id="pause" class="btn" onclick="showModal()"></div>
+            <div id="pause" class="btn" onclick="modalPause()"></div>
 
 
             <div id="btn_up" class="btn btn_game" onMouseMove="planeUp()" onMouseOut="planeDefault()"></div>
@@ -54,7 +63,7 @@
             <div id="btn_right" class="btn btn_game" onMouseMove="planeRight()"></div> 
 
 
-            <div id="timer_main">
+            <div id="timer_main" class="score">
                 <img src="image/timer.png" alt="timer">
                 <div id="timer"></div>
             </div>
@@ -98,6 +107,29 @@
 
     </div>
 
+<!--Game Over Box-->
+
+<div style="width:100%; margin-top:10%; position:fixed; left:0px; top:0px; z-index:99999999; display:none; " id="gaveoverbox">
+	<div style="width:400px;  margin:auto; background-color:#FFFF99; border:5px solid #CC0000; box-shadow:0px 0px 30px #000; border-radius:10px; padding:20px; text-align:center; ">
+
+		<h1 class="style1">Game Over</h1>
+		<div style="font-size:25px; font-weight:bold; margin-bottom:10px; margin-top:10px;" >Total Score <span id="showscor"></span></div>
+		<div style="font-size:25px; font-weight:bold; margin-bottom:10px; margin-top:10px;" >Time <span id="time"></span></div>
+        
+        <!-- <div style="margin-top:10px; font-size:13px;">Retry Please</div> -->
+		<form style="margin-top:20px;">
+            <input type="text" style="background-color:#fff; margin-bottom:30px; outline:none; border-radius:10px; padding:10px; color:rgb(0, 0, 0); border:2px solid rgb(199, 19, 19); font-size:18px; font-family:Verdana, Arial, Helvetica, sans-serif;" id="nick" placeholder="Введите никнейм" required>
+			<input type="submit"  style="background-color:#CC3300; border-radius:10px; padding:10px; color:#FFFFFF; border:2px solid #000; font-size:18px; font-family:Verdana, Arial, Helvetica, sans-serif;" value="Re-Start Game"/>
+		</form>
+	</div>
+</div>
+
+<!--Game Over Box-->
+
+
+
+
+
        <!-- Наше модальное всплывающее окно -->
        <div style="text-align: center" id="popupWin" class="modalwin">
             <h2> Какая-то форма </h2>
@@ -111,66 +143,9 @@
             <hr>
         </div>
 
+
     <script> 
-
-        // MODAL PAUSE
-// function modalPause() {
- 
-//  var darkLayer = document.createElement('div'); // слой затемнения
-//  darkLayer.id = 'shadow'; // id чтобы подхватить стиль
-//  document.body.appendChild(darkLayer); // включаем затемнение
-
-//  var modalWin = document.getElementById('popupWin'); // находим наше "окно"
-//  modalWin.style.display = 'block'; // "включаем" его
-
-//  darkLayer.onclick = function () {  // при клике на слой затемнения все исчезнет
-//      darkLayer.parentNode.removeChild(darkLayer); // удаляем затемнение
-//      modalWin.style.display = 'none'; // делаем окно невидимым
-//      return false;
-//  };
-// }
-
-
-//    factoryMove.fromRightToLeft();
- 
-
-
-
-
-
-/*
-
-
-
-factoryMove.fromTopToDown();
-   factoryMove.fromRightToLeft();
-
-   
-
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-   /*  factoryA.getInstance(TYPE_CLOUD)
-    factoryA.getInstance(TYPE_BIRD)
-    factoryA.getInstance(TYPE_PLANE)
-    factoryA.getInstance(TYPE_FUEL)
-    factoryA.getInstance(TYPE_STAR)
-    */
-
-    let myAudio = document.getElementById('myaudio');
-    myAudio.paused = true;
-    myAudio.play();
+    var myAudio = document.getElementById('myaudio');
     //document.getElementById('myaudio').play();
 
    let btn = document.getElementById('btn_sound');
@@ -185,7 +160,14 @@ factoryMove.fromTopToDown();
      }
  }
 
- 
     </script>
+<script
+src="https://code.jquery.com/jquery-3.3.1.min.js"
+integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+crossorigin="anonymous"></script>
+<script
+  src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+  integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+  crossorigin="anonymous"></script>
 </body>
 </html>
