@@ -13,6 +13,24 @@ const TYPE_STAR_P = 70;
 let score__star = { value: 0 };
 let score__fuel = { value: 1 };
 
+let resultTable = [{
+    name: "xxx",
+    time: "4:40",
+    stars: 250
+},
+{
+    name: "bbb",
+    time: "4:40",
+    stars: 234
+},
+{
+    name: "ccc",
+    time: "4:40",
+    stars: 10
+}];
+console.log(JSON.stringify(resultTable));
+
+
 let list = [TYPE_CLOUD, TYPE_BIRD, TYPE_PLANE, TYPE_FUEL, TYPE_STAR];
 let list_p = [TYPE_CLOUD_P, TYPE_BIRD_P, TYPE_PLANE_P, TYPE_FUEL_P, TYPE_STAR_P];
 
@@ -445,22 +463,6 @@ $('.prove').fadeIn('slow');
 // }
 
 //TABLE
-let resultTable = [{
-    name: "xxx",
-    time: "4:40",
-    stars: 250
-},
-{
-    name: "bbb",
-    time: "4:40",
-    stars: 234
-},
-{
-    name: "ccc",
-    time: "4:40",
-    stars: 10
-}];
-console.log(JSON.stringify(resultTable));
 
 function drawTableResult(){
     let rows ="";
