@@ -11,7 +11,7 @@ const TYPE_FUEL_P = 30;
 const TYPE_STAR_P = 70;
 
 let score__star = { value: 0 };
-let score__fuel = { value: 110 };
+let score__fuel = { value: 1 };
 
 let list = [TYPE_CLOUD, TYPE_BIRD, TYPE_PLANE, TYPE_FUEL, TYPE_STAR];
 let list_p = [TYPE_CLOUD_P, TYPE_BIRD_P, TYPE_PLANE_P, TYPE_FUEL_P, TYPE_STAR_P];
@@ -412,11 +412,14 @@ function gameOver() {
     MyDiv4.innerHTML = MyDiv3.innerHTML;
 
     myAudio.pause();
-
     clearInterval(srartGameInterval);
-    
 }
 
+function table(){
+    $( "#tablebox" ).slideDown( "slow" );
+    $("#gaveoverbox").fadeOut();
+    drawTableResult();
+}
 //MUSIC in html
 
 //PAUSE
@@ -442,33 +445,36 @@ $('.prove').fadeIn('slow');
 // }
 
 //TABLE
-
-let resultTable = [];
-resultTable.push({
+let resultTable = [{
     name: "xxx",
     time: "4:40",
     stars: 250
-});
-resultTable.push({
+},
+{
     name: "bbb",
     time: "4:40",
     stars: 234
-});
-resultTable.push({
+},
+{
     name: "ccc",
     time: "4:40",
     stars: 10
-});
-resultTable.push({
-    name: "aaa",
-    time: "4:40",
-    stars: 1
-});
-resultTable.push({
-    name: "TTre",
-    time: "4:40",
-    stars: 234
-});
+}];
 console.log(JSON.stringify(resultTable));
-/// 
+
+function drawTableResult(){
+    let rows ="";
+    let aa = [...resultTable];
+    aa.forEach((element)=>{
+        rows += "<tr>";
+
+        rows+= "<td>" + element.name+ "</td>"
+        rows+= "<td>" + element.stars+ "</td>"
+        rows+= "<td>" + element.time+ "</td>"
+        
+        rows += "</tr>";
+    });
+    document.querySelector('#tableResult').innerHTML = rows;
+
+}
 

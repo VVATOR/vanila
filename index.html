@@ -119,19 +119,33 @@
         <!-- <div style="margin-top:10px; font-size:13px;">Retry Please</div> -->
 		<form style="margin-top:20px;">
             <input type="text" style="background-color:#fff; margin-bottom:30px; outline:none; border-radius:10px; padding:10px; color:rgb(0, 0, 0); border:2px solid rgb(199, 19, 19); font-size:18px; font-family:Verdana, Arial, Helvetica, sans-serif;" id="nick" placeholder="Введите никнейм" required>
-			<input type="submit"  style="background-color:#CC3300; border-radius:10px; padding:10px; color:#FFFFFF; border:2px solid #000; font-size:18px; font-family:Verdana, Arial, Helvetica, sans-serif;" value="Re-Start Game"/>
+			<input type="button" onclick="table()" style="background-color:#CC3300; border-radius:10px; padding:10px; color:#FFFFFF; border:2px solid #000; font-size:18px; font-family:Verdana, Arial, Helvetica, sans-serif;" value="NEXT"/>
 		</form>
 	</div>
 </div>
 
 <!--Game Over Box-->
 
+<!--TABLE Box-->
 
+<div style="width:100%; margin-top:10%; position:fixed; left:0px; top:0px; z-index:99999999; display:none; " id="tablebox">
+	<div style="width:400px;  margin:auto; background-color:#FFFF99; border:5px solid #CC0000; box-shadow:0px 0px 30px #000; border-radius:10px; padding:20px; text-align:center; ">
 
+		<h1 class="style1">Record Table</h1>
+
+        <table id="tableResult"/>
+
+		<form style="margin-top:20px;">
+            <input type="submit"  style="background-color:#CC3300; border-radius:10px; padding:10px; color:#FFFFFF; border:2px solid #000; font-size:18px; font-family:Verdana, Arial, Helvetica, sans-serif;" value="Re-Start Game"/>
+		</form>
+	</div>
+</div>
+
+<!--TABLE  Box-->
 
 
        <!-- Наше модальное всплывающее окно -->
-       <div style="text-align: center" id="popupWin" class="modalwin">
+       <!-- <div style="text-align: center" id="popupWin" class="modalwin">
             <h2> Какая-то форма </h2>
             <form>
                 <input value="text">
@@ -141,7 +155,7 @@
             <h2> Какой-то текст </h2>
             <br> <p> УРа!!!!!!!!!! </p>
             <hr>
-        </div>
+        </div> -->
 
 
     <script> 
