@@ -5,6 +5,6 @@ $newTableJson = json_encode($ar);
 //echo $_GET['query'];
 setcookie("resultTable", $newTableJson);
 
-echo $_COOKIE['resultTable'];
+echo $newTableJson;
 
 ?>
