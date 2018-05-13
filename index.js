@@ -113,6 +113,7 @@ const lifecycle = (() => {
 
     stop = () => {
         console.log("stop");
+
         //ajax
         // let xhr = new XMLHttpRequest();
         // xhr.onreadystatechange = function () {
@@ -421,7 +422,7 @@ function gameOver() {
     $(".bird").css("display","none");
 
     let MyDiv1 = document.getElementById('score__star');
-	let MyDiv2 = document.getElementById('showscor');
+	let MyDiv2 = document.getElementById('showstar');
     MyDiv2.innerHTML = MyDiv1.innerHTML;
     
 
@@ -464,19 +465,49 @@ $('.prove').fadeIn('slow');
 
 //TABLE
 
-function drawTableResult(){
-    let rows ="";
-    let aa = [...resultTable];
-    aa.forEach((element)=>{
-        rows += "<tr>";
 
-        rows+= "<td>" + element.name+ "</td>"
-        rows+= "<td>" + element.stars+ "</td>"
-        rows+= "<td>" + element.time+ "</td>"
+function drawTableResult(){
+    let sendObj ={
+        name: document.getElementById('nick').value,
+        time: document.getElementById('time').innerText,
+        stars: document.getElementById('showstar').innerText
+    }
+
+    let xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                alert(this.responseText);
+                resultTable = JSON.parse(this.responseText);
+               try{
+                resultTable.sort((a, b) => {
+                    return b.stars - a.stars;
+                });         
+            }catch(err){}
+            
+            
+
+
+            let rows ="";
+            resultTable.forEach((element)=>{
+                try{
+                rows += "<tr>";
         
-        rows += "</tr>";
-    });
-    document.querySelector('#tableResult').innerHTML = rows;
+                rows+= "<td>" + element.name+ "</td>"
+                rows+= "<td>" + element.stars+ "</td>"
+                rows+= "<td>" + element.time+ "</td>"
+                
+                rows += "</tr>";
+                }catch(err){}
+            });
+            document.querySelector('#tableResult').innerHTML = rows;
+
+
+            }
+        }
+        xhr.open("GET", "http://ws1/index.php?query=" + JSON.stringify(sendObj), true);
+        xhr.send();
+
+    
 
 }
 
