@@ -11,7 +11,7 @@ const TYPE_FUEL_P = 30;
 const TYPE_STAR_P = 70;
 
 let score__star = { value: 0 };
-let score__fuel = { value: 1 };
+let score__fuel = { value: 2 };
 
 let resultTable = [{
     name: "xxx",
@@ -104,11 +104,9 @@ const lifecycle = (() => {
         timer();
         backTimer();
         console.log("start");
-        if (endGame === true){
             srartGameInterval = setInterval(() => {
                 lifecycle.create();
             }, 500);
-        } 
     }
 
     stop = () => {
@@ -453,7 +451,13 @@ function modalPause() {
 }
 
 ///animation proive
-$('.prove').fadeIn('slow');
+
+
+
+
+
+
+// $('.prove').fadeIn('slow');
 
 ////MODAL
 // function showModal() {
@@ -476,35 +480,40 @@ function drawTableResult(){
     let xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
-                alert(this.responseText);
-                resultTable = JSON.parse(this.responseText);
+                console.log("===1========================");
+                let resp=this.responseText;
+                alert(resp);
+                resultTable = JSON.parse(resp);
+                
                try{
                 resultTable.sort((a, b) => {
                     return b.stars - a.stars;
                 });         
-            }catch(err){}
+                }catch(err){}
             
             
-
+            console.log("===2========================");
+            console.log( resultTable);
 
             let rows ="";
             resultTable.forEach((element)=>{
                 try{
                 rows += "<tr>";
         
-                rows+= "<td>" + element.name+ "</td>"
+                rows+= "<td>" + element.name + "</td>"
                 rows+= "<td>" + element.stars+ "</td>"
                 rows+= "<td>" + element.time+ "</td>"
                 
                 rows += "</tr>";
                 }catch(err){}
             });
+            
             document.querySelector('#tableResult').innerHTML = rows;
 
 
             }
         }
-        xhr.open("GET", "http://ws1/index.php?query=" + JSON.stringify(sendObj), true);
+        xhr.open("GET", "./index.php?query=" + JSON.stringify(sendObj), true);
         xhr.send();
 
     
