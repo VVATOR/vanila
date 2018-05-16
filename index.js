@@ -104,9 +104,9 @@ const lifecycle = (() => {
         timer();
         backTimer();
         console.log("start");
-            srartGameInterval = setInterval(() => {
-                lifecycle.create();
-            }, 500);
+        srartGameInterval = setInterval(() => {
+            lifecycle.create();
+        }, 500);
     }
 
     stop = () => {
@@ -413,7 +413,6 @@ function backTimer() {
 
 function gameOver() {
     
-    endGame = false;
     $( "#gaveoverbox" ).slideDown( "slow" );
     $(".btn").css("display","none");
     $(".score").css("display","none");
@@ -482,14 +481,14 @@ function drawTableResult(){
             if (this.readyState == 4 && this.status == 200) {
                 console.log("===1========================");
                 let resp=this.responseText;
-                alert(resp);
+               
                 resultTable = JSON.parse(resp);
-                
-               try{
+               //  alert(resultTable);
+               /*try{
                 resultTable.sort((a, b) => {
                     return b.stars - a.stars;
                 });         
-                }catch(err){}
+                }catch(err){}*/
             
             
             console.log("===2========================");
@@ -497,26 +496,33 @@ function drawTableResult(){
 
             let rows ="";
             resultTable.forEach((element)=>{
-                try{
+                console.log(element);
+               
                 rows += "<tr>";
         
-                rows+= "<td>" + element.name + "</td>"
-                rows+= "<td>" + element.stars+ "</td>"
-                rows+= "<td>" + element.time+ "</td>"
+                rows+= "<td>"; 
+                rows+= element.name ||"";
+                rows+= "</td>";
+                rows+= "<td>"; 
+                rows+=element.stars||""; 
+                rows+="</td>"; 
+                rows+= "<td>"; 
+                rows+=element.time ||""; 
+                rows+="</td>";
                 
                 rows += "</tr>";
-                }catch(err){}
+              
             });
-            
-            document.querySelector('#tableResult').innerHTML = rows;
+             
+            console.log("===33========================");
+            document.querySelector('#tableResult').innerHTML += rows;
 
-
+ 
+            console.log("===4========================");
             }
         }
         xhr.open("GET", "./index.php?query=" + JSON.stringify(sendObj), true);
         xhr.send();
-
-    
 
 }
 
