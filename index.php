@@ -6,7 +6,7 @@ if($cookie==null){
 }else{
      $ar= json_decode($_COOKIE['resultTable']);
 }
-array_push($ar,$_GET['query']);
+array_push($ar,json_decode($_GET['query']));
 
 $newTableJson = json_encode($ar);
 //echo $_GET['query'];

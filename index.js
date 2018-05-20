@@ -483,46 +483,36 @@ function drawTableResult(){
                 let resp=this.responseText;
                
                 resultTable = JSON.parse(resp);
-               //  alert(resultTable);
-               /*try{
-                resultTable.sort((a, b) => {
-                    return b.stars - a.stars;
-                });         
-                }catch(err){}*/
-            
-            
+       
             console.log("===2========================");
             console.log( resultTable);
 
             let rows ="";
-            resultTable.forEach((element)=>{
-                console.log(element);
-               
+            resultTable.forEach((elementJson)=>{
+                if(elementJson!=null){
                 rows += "<tr>";
-        
                 rows+= "<td>"; 
-                rows+= element.name ||"";
+                rows+= elementJson["name"];
                 rows+= "</td>";
                 rows+= "<td>"; 
-                rows+=element.stars||""; 
+                rows+=elementJson.stars; 
                 rows+="</td>"; 
                 rows+= "<td>"; 
-                rows+=element.time ||""; 
-                rows+="</td>";
-                
+                rows+=elementJson.time; 
+                rows+="</td>";                
                 rows += "</tr>";
+            }
               
             });
              
             console.log("===33========================");
-            document.querySelector('#tableResult').innerHTML += rows;
-
- 
+            document.querySelector('#tableResult').innerHTML = rows;
             console.log("===4========================");
             }
-        }
-        xhr.open("GET", "./index.php?query=" + JSON.stringify(sendObj), true);
-        xhr.send();
+    }
+    xhr.open("GET", "./index.php?query=" + JSON.stringify(sendObj), true);
+    xhr.send();
+
 
 }
 
